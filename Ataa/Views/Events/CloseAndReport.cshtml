@@ -1,0 +1,33 @@
+﻿@model Ataa.Models.Events
+
+<div class="container mt-5" dir="rtl">
+    <div class="card shadow-lg border-0 style="border-radius: 20px;">
+        <div class="card-header bg-success text-white text-center">
+            <h3>تقرير إنجاز فعالية: @Model.Name</h3>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="SubmitFinalReport" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <div class="mb-3">
+                    <label class="fw-bold text-success">أهداف المبادرة (اكتب ما تم تحقيقه فعلياً):</label>
+                    <textarea name="GoalsReport" class="form-control" rows="3" placeholder="مثال: تم غرس 500 شتلة بمشاركة المجتمع..." required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="fw-bold text-success">آلية التنفيذ والنتائج:</label>
+                    <textarea name="ExecutionMechanism" class="form-control" rows="3" placeholder="اشرح كيف تمت الفعالية..." required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="fw-bold text-success">صور التنفيذ (اختر صور الفعالية من جهازك):</label>
+                    <input type="file" name="NewImages" multiple class="form-control" accept="image/*" />
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg px-5">حفظ وإغلاق الفعالية نهائياً</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

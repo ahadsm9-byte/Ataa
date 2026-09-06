@@ -1,0 +1,269 @@
+﻿@model IEnumerable<Ataa.Models.Events>
+
+
+<style>
+    .page-header-centered {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .main-page-title {
+        color: var(--main-green);
+        font-weight: 800;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+
+        .main-page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 4px;
+            background: var(--main-green);
+            border-radius: 2px;
+        }
+
+    .add-new-btn-green {
+        background-color: var(--main-green) !important;
+        color: green;
+        padding: 12px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-flex;
+        align-items: lift;
+        gap: 10px;
+        box-shadow: 0 4px 15px rgba(45, 77, 34, 0.3);
+        transition: 0.3s;
+        border: none;
+        margin-top: 15px;
+    }
+
+        .add-new-btn-green:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 77, 34, 0.4);
+            filter: brightness(1.1);
+        }
+
+    .search-container {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+    .search-box {
+        max-width: 600px;
+        margin: 0 auto 25px;
+        position: relative;
+    }
+
+    .search-control {
+        border-radius: 30px;
+        padding: 12px 45px 12px 20px;
+        border: 1px solid #ddd;
+        background: #f9f9f9;
+        text-align: right;
+    }
+
+    .fields-grid {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .field-item {
+        background: #f1f5f0;
+        padding: 8px 25px;
+        border-radius: 50px; 
+        text-decoration: none;
+        color: var(--main-green);
+        font-weight: bold;
+        font-size: 0.9rem;
+        transition: 0.3s;
+        border: 1px solid transparent;
+    }
+
+        .field-item:hover, .field-item.active-filter {
+            background: var(--main-green);
+            color: white;
+        }
+
+    .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .event-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border: 1px solid #eee;
+        transition: 0.3s;
+        position: relative;
+        direction: rtl;
+    }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .card-img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .status-tag {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        color: white;
+        font-weight: bold;
+        z-index: 10;
+    }
+
+    .card-body {
+        padding: 15px;
+        text-align: right;
+    }
+
+    .card-title {
+        color: var(--main-green);
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .card-footer-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr; 
+        gap: 5px;
+        padding: 10px;
+        background: #fcfdfc;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .btn-c {
+        background: #fff4e5;
+        color: #ff9800;
+    }
+
+    .btn-action {
+        padding: 6px;
+        border-radius: 8px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .btn-v {
+        background: #e7f1ff;
+        color: #0d6efd;
+    }
+
+    .btn-e {
+        background: #eef3ed;
+        color: var(--main-green);
+    }
+
+    .btn-d {
+        background: #feebeb;
+        color: #dc3545;
+    }
+</style>
+
+
+<div class="page-header-centered">
+    <h2 class="main-page-title">الفعاليات المتاحة</h2>
+    <br />
+    <div class="d-flex justify-content-center gap-3">
+        <a asp-action="CreateEvent" class="add-new-btn-green">
+            <i class="fas fa-plus-circle"></i> إضافة فعالية جديدة
+        </a>
+        <a asp-action="FinishedEvents" class="add-new-btn-green" !important;">
+            <i class=" fas fa-plus-circle"></i> الفعاليات المنتهية
+        </a>
+    </div>
+</div>
+
+<div class="search-container">
+    <h5 class="mb-3 fw-bold" style="color: var(--text-green);">ابحث في الفرص التطوعية</h5>
+    <form asp-action="emIndex" method="get" class="search-box">
+        <i class="fas fa-search" style="position: absolute; right: 15px; top: 15px; color: #aaa;"></i>
+        <input type="text" id="searchInput" name="searchString" class="form-control search-control" placeholder="ابحث باسم الفعالية أو المدينة..." value="@ViewData["CurrentFilter"]">
+    </form>
+
+    <div class="fields-grid">
+        @{
+            var currentCat = Context.Request.Query["category"].ToString();
+        }
+        <a href="@Url.Action("emIndex", new { category = "بيئي" })" class="field-item @(currentCat == "بيئي" ? "active-filter" : "")">بيئي</a>
+        <a href="@Url.Action("emIndex", new { category = "تعليمي" })" class="field-item @(currentCat == "تعليمي" ? "active-filter" : "")">تعليمي</a>
+        <a href="@Url.Action("emIndex", new { category = "خيري" })" class="field-item @(currentCat == "خيري" ? "active-filter" : "")">خيري</a>
+        <a href="@Url.Action("emIndex", new { category = "تطوعي" })" class="field-item @(currentCat == "تطوعي" ? "active-filter" : "")">تطوعي</a>
+        <a href="@Url.Action("emIndex")" class="field-item @(string.IsNullOrEmpty(currentCat) ? "active-filter" : "")" style="background:#ddd;">الكل</a>
+    </div>
+</div>
+
+<div class="events-grid">
+    @foreach (var item in Model)
+    {
+        bool isDraft = item.Status == "Draft";
+        <div class="event-card">
+            <span class="status-tag @(isDraft ? "bg-secondary" : "bg-success")">
+                @(isDraft ? "مسودة" : "منشور")
+            </span>
+            <img src="@(string.IsNullOrEmpty(item.Image) ? "/images/default.jpg" : item.Image)" class="card-img" onerror="this.src='/images/default.jpg'" />
+
+            <div class="card-body">
+                <div class="card-title">@item.Name</div>
+                <div class="small text-muted mb-2">
+                    <i class="bi bi-geo-alt-fill text-danger"></i> @(item.Location ?? "غير محدد")
+                </div>
+                <span class="badge bg-light text-dark border">@item.Category</span>
+            </div>
+
+            <div class="card-footer-actions">
+                <a asp-action="emDetails" asp-route-id="@item.Id" class="btn-action btn-v">عرض</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn-action btn-e">تعديل</a>
+
+                @if (item.Status != "Closed")
+                {
+                    <form asp-action="CloseEvent" asp-route-id="@item.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn-action btn-c" style="width:100%; border:none;" onclick="return confirm('هل أنت متأكد من إغلاق هذه الفعالية؟')">إغلاق</button>
+                    </form>
+                }
+
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn-action btn-d">حذف</a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#searchInput").autocomplete({
+                source: '@Url.Action("GetSuggestions", "Events")',
+                minLength: 1,
+                select: function (event, ui) {
+                    $(this).val(ui.item.value);
+                    $(this).closest('form').submit();
+                }
+            });
+        });
+    </script>
+}

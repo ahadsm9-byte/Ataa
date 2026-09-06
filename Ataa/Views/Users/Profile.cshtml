@@ -1,0 +1,420 @@
+﻿@model Ataa.Models.ProfileViewModel
+@{
+    ViewData["Title"] = "الملف الشخصي";
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+}
+
+<style>
+    :root {
+        --primary-green: #1f6f43; 
+        --green-dark: #155a36;
+        --bg-light: #f4f7fe;
+        --text-dark: #1b4332;
+        --border-color: #e0e5f2;
+    }
+
+    body {
+        background: #f4f7f4;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .profile-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        direction: rtl; 
+    }
+
+    .cover-header {
+        height: 200px;
+        background: linear-gradient(135deg, #1f6f43 0%, #155a36 100%);
+        border-radius: 0 0 20px 20px;
+        position: relative;
+        margin-bottom: -100px;
+    }
+
+    .btn-change-cover {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid white;
+        padding: 5px 15px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+    }
+
+    .sidebar-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        margin-top: 20px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .cover-header {
+        margin-bottom: -60px; 
+    }
+
+    .sidebar-card h5 {
+        margin-top: 15px;
+    }
+
+    .sidebar-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-img-container {
+        margin-bottom: 10px;
+    }
+
+    .stat-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f4f7fe;
+        font-size: 0.9rem;
+        color: #707eae;
+    }
+
+    .stat-value {
+        font-weight: 700;
+        color: var(--primary-green);
+    }
+
+    .main-settings-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .nav-tabs-custom {
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 30px;
+        gap: 20px;
+        display: flex;
+    }
+
+    .nav-link-custom {
+        color: #707eae;
+        padding: 10px 5px;
+        text-decoration: none;
+        font-weight: 600;
+        position: relative;
+    }
+
+        .nav-link-custom.active {
+            color: var(--primary-green);
+        }
+
+            .nav-link-custom.active::after {
+                content: "";
+                position: absolute;
+                bottom: -1px;
+                right: 0;
+                width: 100%;
+                height: 3px;
+                background: var(--primary-green);
+                border-radius: 10px;
+            }
+
+    .form-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+    }
+
+    .form-control-custom {
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 12px 15px;
+        background: white;
+        color: #2b3674;
+        font-size: 0.95rem;
+    }
+
+    .btn-update {
+        background: var(--primary-green);
+        color: white;
+        border: none;
+        padding: 10px 40px;
+        border-radius: 10px;
+        font-weight: 600;
+        margin-top: 20px;
+    }
+
+    .checkbox-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+    }
+
+    .check-item {
+        background: #f4f7fe;
+        border-radius: 10px;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85rem;
+    }
+
+    .rating-container {
+        display: inline-flex;
+        flex-direction: row-reverse;
+        gap: 3px;
+    }
+
+    .star-rating {
+        cursor: pointer;
+        color: #ddd;
+        font-size: 1.2rem;
+    }
+
+        .star-rating.selected {
+            color: #ffc107 !important;
+        }
+</style>
+
+<div class="profile-wrapper">
+    <div class="cover-header"></div>
+
+    <div class="container-fluid">
+        <div class="row px-md-4">
+            <div class="col-lg-3">
+                <div class="sidebar-card">
+                    <div class="profile-img-container">
+                    </div>
+                    <h5 class="fw-bold mb-0">@Model.UserProfile.Name</h5>
+                    <p class="text-muted small">متطوع</p>
+
+                    <div class="mt-4">
+                        <div class="stat-row">
+                            <span>المشاركات السابقة</span>
+                            <span class="stat-value text-primary">@(Model.VolunteerHistory?.Count() ?? 0)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>المهارات المكتسبة</span>
+                            <span class="stat-value text-success">@Model.SelectedSkillIds.Count</span>
+                        </div>
+                        <div class="stat-row border-0">
+                            <span>ساعات التطوع</span>
+                            <span class="stat-value text-warning">@Model.VolunteerHistory?.Sum(x => x.Event.Hours)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9 mt-4">
+                <div class="main-settings-card mt-lg-5">
+                    <div class="nav nav-tabs-custom">
+                        <a href="#" class="nav-link-custom active">إعدادات الحساب</a>
+                    </div>
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success border-0 shadow-sm mb-4">@TempData["Success"]</div>
+                    }
+
+                    <form asp-action="UpdateBasicInfo" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">الاسم الكامل</label>
+                                <input asp-for="UserProfile.Name" class="form-control form-control-custom" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">رقم الجوال</label>
+                                <input asp-for="UserProfile.Phone" class="form-control form-control-custom" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">البريد الإلكتروني</label>
+                                <input asp-for="UserProfile.Email" class="form-control form-control-custom" readonly style="background: #f8f9fa;" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">كلمة المرور</label>
+                                <input asp-for="UserProfile.Password" type="password" class="form-control form-control-custom" />
+                            </div>
+                            <div class="col-12 mb-4">
+                                <label class="form-label d-block">الجنس</label>
+                                <div class="btn-group w-100" role="group">
+                                    <input type="radio" class="btn-check" asp-for="UserProfile.Gender" value="ذكر" id="male">
+                                    <label class="btn btn-outline-primary" for="male">ذكر</label>
+                                    <input type="radio" class="btn-check" asp-for="UserProfile.Gender" value="أنثى" id="female">
+                                    <label class="btn btn-outline-primary" for="female">أنثى</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-update">حفظ البيانات الأساسية</button>
+                    </form>
+
+                    <hr class="my-5" />
+
+                    <form asp-action="UpdatePreferences" method="post">
+                        <input type="hidden" name="VolunteerID" value="@Model.UserProfile.VolunteerID" />
+                        <h5 class="fw-bold mb-4 text-dark"><i class="fas fa-cog me-2"></i> التفضيلات والمهارات</h5>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">الموقع الحالي</label>
+                                <input name="Location" value="@Model.UserProfile.Location" class="form-control form-control-custom" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">الفترة المفضلة</label>
+                                <select name="Shift" class="form-select form-control-custom">
+                                    <option value="صباحي" selected="@(Model.UserProfile.Shift == "صباحي")">صباحي</option>
+                                    <option value="مسائي" selected="@(Model.UserProfile.Shift == "مسائي")">مسائي</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <p class="form-label">أيام التطوع المتاحة</p>
+                            <div class="checkbox-group">
+                                @foreach (var day in new[] { "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت" })
+                                {
+                                    <label class="check-item">
+                                        <input type="checkbox" name="selectedDays" value="@day" class="form-check-input"
+                                        @(Model.UserProfile.AvailableDays != null && Model.UserProfile.AvailableDays.Contains(day) ? "checked" : "") />
+                                        <span>@day</span>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <p class="form-label">المهارات</p>
+                                <div class="checkbox-group">
+                                    @foreach (var skill in Model.AllSkills)
+                                    {
+                                        <label class="check-item">
+                                            <input type="checkbox" name="selectedSkills" value="@skill.SkillID" class="form-check-input"
+                                            @(Model.SelectedSkillIds.Contains(skill.SkillID) ? "checked" : "") />
+                                            <span>@skill.SkillName</span>
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="form-label">الاهتمامات</p>
+                                <div class="checkbox-group">
+                                    @foreach (var interest in Model.AllInterests)
+                                    {
+                                        <label class="check-item">
+                                            <input type="checkbox" name="selectedInterests" value="@interest.InterestID" class="form-check-input"
+                                            @(Model.SelectedInterestIds.Contains(interest.InterestID) ? "checked" : "") />
+                                            <span>@interest.InterestName</span>
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+                        </div><button type="submit" class="btn btn-update">تحديث التفضيلات</button>
+                    </form>
+
+                    <hr class="my-5" />
+
+                    <h5 class="fw-bold mb-4 text-dark"><i class="fas fa-history me-2"></i> سجل المشاركات</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover border-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>الفعالية</th>
+                                    <th>التاريخ</th>
+                                    <th>الساعات</th>
+                                    <th>التقييم</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.VolunteerHistory?.Any() == true)
+                                {
+                                    foreach (var item in Model.VolunteerHistory)
+                                    {
+                                        <tr>
+                                            <td class="fw-bold">@item.Event.Name</td>
+                                            <td class="small text-muted">@item.Event.Date.ToString("dd/MM/yyyy")</td>
+                                            <td><span class="badge bg-light text-dark">@item.Event.Hours ساعة</span></td>
+                                            <td>
+                                                @if (item.AttendanceStatus == "تم الحضور")
+                                                {
+                                                    <div class="rating-container" data-regid="@item.Id">
+                                                        @for (int i = 5; i >= 1; i--)
+                                                        {
+                                                            <span class="star-rating @(item.Rating >= i ? "selected" : "")" data-value="@i">★</span>
+                                                        }
+                                                    </div>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge @(item.AttendanceStatus == "تم الحضور" ? "bg-success-subtle text-success" : "bg-warning-subtle text-warning") px-3">
+                                                    @item.AttendanceStatus
+                                                </span>
+                                            </td>
+                                          
+                                            <td>
+                                                @{
+                                                    var issuedCertificates = ViewBag.IssuedCertificates as List<int> ?? new List<int>();
+                                                }
+
+                                                @if (item.AttendanceStatus == "تم الحضور" && issuedCertificates.Contains(item.Id))
+                                                {
+                                                    <a asp-action="DownloadCertificate" asp-route-registrationId="@item.Id" target="_blank" class="btn btn-sm btn-outline-warning rounded-pill px-3" style="border-color: #d4a017; color: #d4a017;">
+                                                        <i class="fas fa-file-download me-1"></i>
+                                                        تحميل الشهادة
+                                                    </a>
+                                                }
+                                                else if (item.AttendanceStatus == "تم الحضور")
+                                                {
+
+                                                    <span class="text-muted small">قيد المعالجة</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted small">---</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.star-rating').on('click', function () {
+            var $this = $(this);
+            var ratingValue = $this.data('value');
+            var $container = $this.closest('.rating-container');
+            var registrationId = $container.data('regid');
+
+            $.ajax({
+                url: '/Users/UpdateRating',
+                type: 'POST',
+                data: {
+                    id: parseInt(registrationId),
+                    rating: parseInt(ratingValue)
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $container.find('.star-rating').removeClass('selected');
+                        $this.addClass('selected').nextAll().addClass('selected');
+                    }
+                }
+            });
+        });
+    });
+</script>

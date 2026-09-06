@@ -1,0 +1,80 @@
+﻿@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+}
+
+<div class="container text-center" style="max-width: 500px; padding-top: 50px;">
+    <div class="card shadow-lg border-0" style="border-radius: 20px;">
+        <div class="card-header" style="background: #2d4d22; color: white;">
+            <h4>نظام تحضير المتطوعين</h4>
+        </div>
+
+        <div class="card-body">
+            <div id="reader"></div>
+
+            <div id="scan-result" class="mt-4" style="display:none;">
+                <h5>اسم المتطوع:</h5>
+                <h3 id="volunteer-name" class="text-success"></h3>
+
+                <button id="confirm-btn"
+                        class="btn w-100 mt-3"
+                        style="background:#2d4d22; color:white;">
+                    تأكيد الحضور
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<script>
+    let currentRegId = 0;
+
+    const scanner = new Html5QrcodeScanner("reader", {
+        fps: 10,
+        qrbox: 250
+    });
+
+    scanner.render((decodedText) => {
+
+        currentRegId = parseInt(decodedText.trim());
+
+        if (isNaN(currentRegId)) {
+            alert("رمز غير صالح");
+            return;
+        }
+
+        fetch(/Events/GetVolunteerData?regId=${currentRegId})
+            .then(res => {
+                if (!res.ok) throw new Error();
+                return res.json();
+            })
+            .then(data => {
+
+                if (data.attendanceStatus === "تم الحضور") {
+                    alert("تم تسجيل الحضور مسبقاً");
+                    return;
+                }
+
+                document.getElementById('volunteer-name').innerText = data.name;
+                document.getElementById('scan-result').style.display = 'block';
+
+                scanner.clear();
+            })
+            .catch(() => alert("رقم تسجيل غير صحيح"));
+    });
+
+    document.getElementById('confirm-btn').addEventListener('click', () => {
+
+        fetch('/Events/ConfirmAttendance', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ regId: currentRegId })
+        })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            });
+    });
+</script>

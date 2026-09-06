@@ -1,0 +1,189 @@
+﻿@model dynamic
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+
+}
+
+<style>
+    .sidebar, #sidebar-wrapper, .main-sidebar {
+        display: none !important;
+    }
+
+    .main-wrapper, .content-wrapper, main {
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .reg-bg {
+        background: linear-gradient(rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.98)), url('/images/madinah_watermark.jpg');
+        background-size: cover;
+        background-attachment: fixed;
+        min-height: 100vh;
+        padding: 60px 15px;
+        direction: rtl;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    .header-section {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+        .header-section h1 {
+            color: #b89146;
+            font-weight: 800;
+            font-size: 2.5rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+            .header-section h1::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+                height: 3px;
+                background-color: #1d4d2b;
+            }
+
+    .file-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px 20px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        border-top: 6px solid #1d4d2b; 
+        transition: 0.3s ease;
+    }
+
+        .file-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(29, 77, 43, 0.15);
+        }
+
+    .file-icon-box {
+        color: #b89146;
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+    }
+
+    .file-title {
+        color: #1d4d2b;
+        font-weight: 700;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        text-align: center;
+        min-height: 3.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .file-info {
+        font-size: 0.85rem;
+        color: #777;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-view-pdf {
+        background: #1d4d2b;
+        color: white !important;
+        width: 100%;
+        text-align: center;
+        padding: 12px;
+        border-radius: 25px; 
+        text-decoration: none !important;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+        .btn-view-pdf:hover {
+            background: #b89146;
+        }
+
+</style>
+
+<div class="reg-bg">
+    <div class="container">
+        <div class="header-section">
+            <h1>اللوائح والسياسات</h1>
+            <p style="color: #666; margin-top: 10px;">حوكمة معتمدة لضمان أعلى معايير الشفافية والنزاهة</p>
+        </div>
+
+        <div class="row g-4">
+            @functions {
+                public string GetFileSize(int index)
+                {
+                    string[] sizes = { "635 KB", "367 KB", "291 KB", "855 KB", "417 KB", "365 KB", "754 KB", "773 KB", "858 KB", "808 KB", "760 KB", "741 KB", "782 KB", "790 KB", "1.02 MB", "921 KB", "2.73 MB", "680 KB", "764 KB", "384 KB", "771 KB", "336 KB", "799 KB", "773 KB", "366 KB", "398 KB", "747 KB", "442 KB", "574 KB", "700 KB" };
+                    return sizes[index];
+                }
+            }
+
+            @{
+                var files = new[] {
+            new { t = "إفصاح عن وجود استثمارات أو عقارات", l = "68f7f41e19828.pdf" },
+            new { t = "سياسة جمع التبرعات 2025", l = "68f6afd955b28.pdf" },
+            new { t = "الوقاية من غسيل الأموال وجرائم الإرهاب", l = "68f6a1caef56e.pdf" },
+            new { t = "سياسة الإبلاغ عن المخالفات", l = "68f6ae71aac22.pdf" },
+            new { t = "سياسة الاحتفاظ بالوثائق واتلافها", l = "68f6ae9e12cd2.pdf" },
+            new { t = "سياسة الأشتباه بغسل الأموال", l = "68f6aed512c86.pdf" },
+            new { t = "سياسة الرقابة الداخلية", l = "68f6af01ca7c2.pdf" },
+            new { t = "سياسة الصرف على البرامج والأنشطة", l = "68f6af4425e1f.pdf" },
+            new { t = "سياسة تعارض المصالح", l = "68f6af7dc9195.pdf" },
+            new { t = "توجيه مبلغ التبرع الى مشروع آخر", l = "68f6afc651888.pdf" },
+            new { t = "تنظيم العلاقة مع المستفيدين", l = "68f6afa49a5d6.pdf" },
+            new { t = "سياسة خصوصية البيانات", l = "68f6b027a3329.pdf" },
+            new { t = "مصفوفة الصلاحيات (مجلس الإدارة)", l = "68f6b053460bd.pdf" },
+            new { t = "سياسة وإجراءات الاستثمار", l = "68f6b07778f59.pdf" },
+            new { t = "لائحة السياسات المالية", l = "68f6b11e0916d.pdf" },
+            new { t = "لائحة المشتريات", l = "68f6b135564d2.pdf" },
+            new { t = "لائحة الموارد البشرية", l = "68f6b145b7a5d.pdf" },
+            new { t = "مسؤوليات المجلس لمكافحة الإرهاب", l = "68f6b0de953b2.pdf" },
+            new { t = "إجراءات التعامل مع غسيل الأموال", l = "68f6b0f93753d.pdf" },
+            new { t = "نتائج تقييم إدارة المخاطر", l = "68f6b15333f86.pdf" },
+            new { t = "لائحة التعامل مع المقبوضات", l = "68f6b0a5dc586.pdf" },
+            new { t = "لائحة إجراءات اختيار المستفيد", l = "68f6a3edb1b7f.pdf" },
+            new { t = "لائحة تنظيم عمل المدير التنفيذي", l = "68f6ad020e041.pdf" },
+            new { t = "إجراءات ضمان معايير التوظيف", l = "68f6ad339daff.pdf" },
+            new { t = "التدابير الاحترازية لتمويل الإرهاب", l = "68f6ad75a9b10.pdf" },
+            new { t = "آلية إدارة المتطوعين", l = "68f6adaf574b6.pdf" },
+            new { t = "آلية التأكد من استحقاق المستفيد", l = "68f6ade3f0ef4.pdf" },
+            new { t = "آلية التدقيق لاختبار السياسات", l = "68f6ae0c0675e.pdf" },
+            new { t = "تقييم المخاطر المتأصلة والكامنة", l = "68f6ae30f0e75.pdf" },
+            new { t = "دليل الإجراءات المالية والمحاسبية", l = "68f6ae4f7eea2.pdf" }
+            };
+
+                for (int i = 0; i < files.Length; i++)
+                {
+                    <div class="col-lg-3 col-md-6">
+                        <div class="file-card">
+                            <div class="file-icon-box">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div class="file-title">@files[i].t</div>
+                            <div class="file-info">
+                                <i class="fas fa-hdd"></i> الحجم: @GetFileSize(i)
+                            </div>
+                            <a href="https://www.madinah-eco.org.sa/rafed/uploads/website_regulations/@files[i].l" target="_blank" class="btn-view-pdf">
+                                <i class="fas fa-eye"></i> عرض الملف
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>

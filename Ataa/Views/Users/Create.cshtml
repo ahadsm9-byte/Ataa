@@ -1,0 +1,95 @@
+﻿@model Ataa.Models.Users
+
+@{
+    ViewData["Title"] = "إضافة عضو جديد";
+}
+
+<div class="container py-5" dir="rtl">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0" style="border-radius: 40px; overflow: hidden;">
+
+                <div class="text-center pt-5 pb-3" style="background-color: #f8f9fa;">
+                    <div class="display-4 text-success mb-2">
+                        <i class="bi bi-person-plus-fill" style="color: #2d5a27;"></i>
+                    </div>
+                    <h2 class="fw-light" style="color: #2d5a27;">انضمام عضو جديد</h2>
+                    <p class="text-muted small">يرجى تعبئة البيانات التالية بدقة</p>
+                </div>
+
+                <div class="card-body p-5">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                        <div class="mb-4">
+                            <label asp-for="Name" class="form-label fw-bold px-3">الاسم الكامل</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0 rounded-pill-right"><i class="bi bi-person text-muted"></i></span>
+                                <input asp-for="Name" class="form-control border-0 bg-light rounded-pill-left shadow-none text-center"
+                                       placeholder="أدخل الاسم الثلاثي" style="height: 55px;" />
+                            </div>
+                            <span asp-validation-for="Name" class="text-danger small px-3"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Email" class="form-label fw-bold px-3">البريد الإلكتروني</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0 rounded-pill-right"><i class="bi bi-envelope text-muted"></i></span>
+                                <input asp-for="Email" class="form-control border-0 bg-light rounded-pill-left shadow-none text-center"
+                                       placeholder="example@ataa.com" style="height: 55px;" />
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger small px-3"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Password" class="form-label fw-bold px-3">كلمة المرور</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0 rounded-pill-right"><i class="bi bi-shield-lock text-muted"></i></span>
+                                <input asp-for="Password" type="password" class="form-control border-0 bg-light rounded-pill-left shadow-none text-center"
+                                       placeholder="••••••••" style="height: 55px;" />
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger small px-3"></span>
+                        </div>
+
+                        <div class="mb-5">
+                            <label asp-for="Role" class="form-label fw-bold px-3">صلاحية المستخدم</label>
+                            <select asp-for="Role" class="form-select border-0 bg-light rounded-pill shadow-none text-center" style="height: 55px; appearance: none;">
+                                <option value="Employee">موظف (User)</option>
+                                <option value="Admin">مدير (Admin)</option>
+                            </select>
+                            <span asp-validation-for="Role" class="text-danger small px-3"></span>
+                        </div>
+
+                        <div class="d-grid gap-3">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill fw-bold py-3 shadow-sm" style="background-color: #2d5a27; border: none;">> ملاذ💘:
+<i class="bi bi-check-circle-fill ml-2"></i> إتمام الإضافة
+                            </button>
+                            <a asp-action="Index" class="btn btn-link text-decoration-none text-muted fw-bold">
+                                <i class="bi bi-arrow-right"></i> العودة للقائمة
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    .rounded-pill-right { border-radius: 0 50px 50px 0 !important; }
+    .rounded-pill-left { border-radius: 50px 0 0 50px !important; }
+
+    body { background-color: #f0f2f5; }
+
+    .form-control:focus {
+        background-color: #fff !important;
+        border: 1px solid #2d5a27 !important;
+    }
+</style>
+

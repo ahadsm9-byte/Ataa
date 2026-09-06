@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Ataa.Models.Donors>
+@using Microsoft.AspNetCore.Http
+@{
+
+    var adminName = Context.Session.GetString("Name") ?? "مدير النظام";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>قائمة المتبرعين - جمعية البيئة</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --text-green: #3d5a37;
+            --light-bg: #f8faf9;
+            --admin-main-green: #5d8e61;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+
+        .main-wrapper {
+            padding: 40px;
+            min-height: 100vh;
+        }
+
+        .page-header-title {
+            color: var(--text-green);
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .donor-table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 50px;
+        }
+
+        .donor-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .donor-table th {
+                color: var(--text-green);
+                border-bottom: 2px solid #f0f0f0;
+                padding: 12px;
+                text-align: center;
+            }
+
+            .donor-table td {
+                padding: 15px;
+                text-align: center;
+                border-bottom: 1px solid #f9f9f9;
+                color: #555;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <div class="d-flex align-items-center mb-4">
+        </div>
+
+        <h1 class="page-header-title">قائمة المتبرعين</h1>
+
+        <div class="search-container">
+            <input type="text" class="search-input" id="donorSearch" placeholder="البحث عن متبرع...">
+        </div>
+
+        <div class="donor-table-container">
+            <table class="donor-table">
+                <thead>
+                    <tr>
+
+
+                        <th>رقم المتبرع (ID)</th>
+                        <th>رقم الجوال</th>
+                    </tr>
+                </thead>
+                <tbody id="donorTableBody">
+                    @foreach (var donor in Model)
+                    {
+                        <tr>
+
+
+                            <td>@donor.DonorId</td>
+                            <td>@donor.Phone</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#donorSearch").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#donorTableBody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@model Ataa.Models.Projects
+
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+    ViewData["Title"] = "تفاصيل المشروع";
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("Role") ?? "";
+    bool isAdmin = userRole.Equals("Admin", StringComparison.OrdinalIgnoreCase);
+    bool isEmployee = userRole.Equals("Employee", StringComparison.OrdinalIgnoreCase);
+    bool canEdit = isAdmin || isEmployee;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - عطاء</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-green: #2D4F28;
+            --light-green: #5c8b4f;
+            --header-beige: #F9F7F2;
+        }
+
+        body {
+            background: #f4f7f4;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+
+        .details-container {
+            margin-top: 50px;
+            margin-bottom: 80px;
+        }
+
+        .project-main-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .donation-box {
+            background-color: var(--header-beige);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            position: sticky;
+            top: 20px;
+        }
+
+        .amount-btn {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            width: 30%;
+            margin: 5px;
+            font-weight: bold;
+            color: var(--primary-green);
+            transition: 0.3s;
+        }
+
+            .amount-btn.active {
+                background-color: var(--primary-green);
+                color: white;
+                border-color: var(--primary-green);
+            }
+
+        .donate-input {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 12px;
+            width: 100%;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .btn-submit-donation {
+            background-color: var(--primary-green);
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border-radius: 25px;
+            border: none;
+            font-weight: bold;
+        }
+
+        .btn-back-list {
+            background-color: #f1f1f1;
+            color: #666;
+            width: 100%;
+            padding: 10px;
+            border-radius: 25px;
+            border: none;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .info-card {
+            background-color: #F9F9F9;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .progress {
+            height: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            background-color: #e9ecef;
+        }
+
+        .stat-grid {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            margin-top: 10px;
+        }
+
+        .partner-box {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container details-container">
+        <div class="row g-5">
+
+            <div class="col-md-4 order-md-1">
+                <div class="donation-box shadow-sm">
+                    <h5 class="fw-bold mb-4" style="color: var(--primary-green);">مبلغ التبرع</h5>
+                    <div class="d-flex flex-wrap justify-content-center">
+                        <button type="button" class="amount-btn select-price" data-amount="10">10 ريال</button>
+                        <button type="button" class="amount-btn select-price" data-amount="15">15 ريال</button>
+                        <button type="button" class="amount-btn select-price" data-amount="20">20 ريال</button>
+                    </div>
+
+                    <div class="position-relative">
+                        <input type="number" id="donationAmount" class="donate-input" placeholder="قيمة المبلغ">
+                        <span style="position: absolute; left: 15px; top: 32px; color: #888;">ريال</span>
+                    </div>
+
+                    <div class="d-flex gap-2 mb-2">
+                        <button type="button" class="btn btn-outline-success rounded-pill px-3 add-to-cart-btn">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </button>
+                        <button type="button" class="btn-submit-donation">تبرع الآن</button>
+                    </div>
+
+                    <a asp-controller="Projects" asp-action="donor_home" class="btn-back-list">
+                        <i class="fa-solid fa-arrow-right ms-1"></i> العودة للقائمة
+                    </a>
+
+                    @if (canEdit)
+                    {
+                        <hr>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary w-100 rounded-pill">تعديل بيانات المشروع</a>
+                    }
+                </div>
+            </div>
+
+            <div class="col-md-8 order-md-2 text-end">
+                <img src="@Model.Image" class="project-main-img shadow-sm" alt="Project Image">
+
+                <div class="progress">
+                    <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width: @Model.CompletionPercentage%">@Model.CompletionPercentage%</div>
+                </div>
+
+                <h2 class="fw-bold mt-4" style="color: var(--primary-green);">@Model.Name</h2>
+                <p class="text-muted mt-3" style="line-height: 2; font-size: 1.1rem;">@Model.Description</p>
+
+                <div class="info-card">
+                    <div class="stat-grid">
+                        <div class="text-center">
+                            <div class="small text-muted mb-1">تم جمع</div>
+                            <div class="fw-bold text-success fs-5">@Model.CurrentAmount.ToString("N0") ريال</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="small text-muted mb-1">المبلغ المتبقي</div>
+                            <div class="fw-bold text-danger fs-5">@(Model.TargetAmount - Model.CurrentAmount) ريال</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="partner-box">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-light p-2 rounded-circle ms-3">
+                            <i class="fa-solid fa-handshake text-success fs-4"></i>
+                        </div>
+                        <div>
+                            <span class="d-block fw-bold small text-muted">الشريك المنفذ</span>
+                            <span class="fw-bold text-success">@Model.OrganizingEntity</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            function updateCartCounter() {
+                let cartData = JSON.parse(localStorage.getItem('cartItems')) || [];
+            }
+
+            $('.select-price').on('click', function () {
+                var amount = $(this).data('amount');
+                $('#donationAmount').val(amount);
+                $('.select-price').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            $('.add-to-cart-btn').on('click', function() {
+                var val = $('#donationAmount').val();
+                if(val > 0) {
+                    var projectItem = {
+                        id: '@Model.Id',
+                        name: '@Model.Name',
+                        image: '@Model.Image',
+                        amount: val
+                    };
+                    var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+                    cartItems.push(projectItem);
+                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                    alert('تم إضافة ' + projectItem.name + ' إلى السلة!');
+                } else {
+                    alert('يرجى تحديد مبلغ التبرع أولاً');
+                }
+            });
+
+            $('.btn-submit-donation').on('click', function() {
+                var val = $('#donationAmount').val();
+                if(val > 0) {
+                    var projectItem = {
+                        id: '@Model.Id',
+                        name: '@Model.Name',
+                        image: '@Model.Image',
+                        amount: val
+                    };
+                    var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+                    cartItems.push(projectItem);
+                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                    window.location.href = '/Projects/Cart';
+                } else {
+                    alert('يرجى إدخال مبلغ التبرع أولاً');
+                }
+            });
+
+            $('#donationAmount').on('input', function() {
+                $('.select-price').removeClass('active');
+            });
+        });
+    </script>
+</body>
+</html>

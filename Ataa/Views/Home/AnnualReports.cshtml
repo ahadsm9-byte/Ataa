@@ -1,0 +1,151 @@
+﻿@model dynamic
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+
+}
+
+<style>
+    .sidebar, #sidebar-wrapper, .main-sidebar {
+        display: none !important;
+    }
+
+    .main-wrapper, .content-wrapper, main {
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .docs-bg {
+        background: linear-gradient(rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.94)), url('https://www.madinah-eco.org.sa/images/madinah_watermark.jpg');
+        background-size: cover;
+        background-attachment: fixed;
+        min-height: 100vh;
+        padding: 60px 15px;
+        direction: rtl;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    .docs-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+        .docs-header h1 {
+            color: #b89146;
+            font-weight: 900;
+            font-size: 2.8rem;
+            border-bottom: 3px solid #1d4d2b;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+    .reports-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .doc-card {
+        background: white;
+        border-radius: 20px;
+        border-top: 6px solid #1d4d2b;
+        padding: 40px 25px;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        flex: 1;
+        min-width: 320px;
+        max-width: 450px;
+    }
+
+        .doc-card:hover {
+            transform: translateY(-12px);
+            border-top-color: #b89146;
+            box-shadow: 0 20px 40px rgba(184, 145, 70, 0.15);
+        }
+
+    .doc-icon-box {
+        font-size: 4rem;
+        color: #b89146;
+        margin-bottom: 20px;
+    }
+
+    .doc-name {
+        color: #1d4d2b;
+        font-weight: 800;
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        height: 60px; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .file-info {
+        color: #777;
+        font-size: 0.9rem;
+        margin-bottom: 25px;
+        display: block;
+    }
+
+    .btn-action {
+        background: #1d4d2b;
+        color: white !important;
+        border: none;
+        padding: 12px 35px;
+        border-radius: 50px;
+        font-weight: bold;
+        text-decoration: none !important;
+        transition: 0.3s;
+        display: inline-block;
+        font-size: 1rem;
+    }
+
+        .btn-action:hover {
+            background: #b89146;
+            transform: scale(1.05);
+        }
+
+   
+
+</style>
+
+<div class="docs-bg">
+    <div class="container">
+
+        <div class="docs-header">
+            <h1>تقارير الجمعية</h1>
+        </div>
+
+        <div class="reports-grid">
+
+            <div class="doc-card">
+                <div class="doc-icon-box">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <h4 class="doc-name">التقرير السنوي للجمعية</h4>
+                <span class="file-info"><i class="fas fa-hdd me-1"></i> الحجم: 46.97 MB</span>
+
+                <a href="https://www.madinah-eco.org.sa/rafed/uploads/website_annual_reports/68fa9c1abb667.pdf" target="_blank" class="btn-action">
+                    <i class="fas fa-eye me-2"></i> عرض التقرير
+                </a>
+            </div>
+
+            <div class="doc-card">
+                <div class="doc-icon-box">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <h4 class="doc-name">التقرير السنوي للبرامج والأنشطة 2024م</h4>
+                <span class="file-info"><i class="fas fa-hdd me-1"></i> الحجم: 42.78 MB</span>
+
+                <a href="https://www.madinah-eco.org.sa/rafed/uploads/website_annual_reports/68fc15122bc2a.pdf" target="_blank" class="btn-action">
+                    <i class="fas fa-eye me-2"></i> عرض التقرير
+                </a>
+            </div>
+
+        </div>
+
+      

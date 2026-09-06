@@ -1,0 +1,293 @@
+﻿@model IEnumerable<Ataa.Models.Projects>
+    @{
+     Layout = "~/Views/Shared/_homeLayout1.cshtml";
+        ViewData["Title"] = "إتمام التبرع والدفع";
+    }
+
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - عطاء</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+        <style>
+            :root {
+                --primary-green: #2D4F28;
+                --light-green: #5c8b4f;
+                --bg-soft: #f4f7f4;
+            }
+
+            body {
+            background: #f4f7f4;
+                font-family: 'Segoe UI', sans-serif;
+            }
+
+            .payment-card {
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+                border: 1px solid #eee;
+            }
+
+            .section-title {
+                color: var(--primary-green);
+                border-right: 4px solid var(--primary-green);
+                padding-right: 15px;
+                margin-bottom: 25px;
+                font-weight: bold;
+            }
+
+            .payment-method-btn {
+                border: 2px solid #eee;
+                border-radius: 15px;
+                padding: 15px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-align: center;
+                background: white;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+                .payment-method-btn.active {
+                    border-color: var(--primary-green);
+                    background-color: #f0f7ef;
+                    box-shadow: 0 4px 10px rgba(45, 79, 40, 0.1);
+                }
+
+            .btn-confirm {
+                background-color: var(--primary-green);
+                color: white;
+                border-radius: 50px;
+                padding: 15px;
+                width: 100%;
+                border: none;
+                font-weight: bold;
+                font-size: 1.1rem;
+                transition: 0.3s;
+            }
+
+                .btn-confirm:hover {
+                    background-color: var(--light-green);
+                    transform: scale(1.02);
+                }
+
+            .form-control {
+                border-radius: 10px;
+                padding: 12px;
+                border: 1px solid #ddd;
+            }
+
+            .bank-box {
+                background: #fff;
+                border: 1px solid #e0e0e0;
+                border-radius: 10px;
+                padding: 15px;
+                margin-bottom: 10px;
+            }
+
+            .apple-pay-mock {
+                background: black;
+                color: white;
+                border-radius: 10px;
+                padding: 20px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+            .summary-item {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+                border-bottom: 1px dashed #eee;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-lg-5 order-lg-2">
+                    <div class="payment-card sticky-top" style="top: 20px;">
+                        <h4 class="section-title">ملخص التبرعات</h4>
+                        <div id="paymentSummaryList"></div>
+                        <div class="mt-4 pt-3 border-top">
+                            <div class="d-flex justify-content-between fw-bold fs-5">
+                                <span>الإجمالي الكلي:</span>
+                            <span id="finalTotal" class="text-success">0 ريال</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7 order-lg-1">
+                <div class="payment-card">
+                    <form id="finalPaymentForm">
+                        <h4 class="section-title">بيانات المتبرع</h4>
+                        <div class="row g-3 mb-5">
+                            <div class="col-md-6">
+                                <label class="small fw-bold mb-1">الاسم (اختياري)</label>
+                                <input type="text" id="donorName" class="form-control" placeholder="فاعل خير">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small fw-bold mb-1">رقم الجوال</label>
+                                <input type="text" id="donorPhone" class="form-control" placeholder="05xxxxxxxx" oninput="validateNumbers(this)">
+                            </div>
+                        </div>
+
+                        <h4 class="section-title">طريقة الدفع</h4>
+                        <div class="row g-3 mb-4">
+                            <div class="col-4">
+                                <div class="payment-method-btn active" onclick="switchPayment('card', this)">
+                                    <i class="fa-solid fa-credit-card fa-2x mb-2 text-primary"></i>
+                                    <span>بطاقة</span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="payment-method-btn" onclick="switchPayment('apple', this)">
+                                    <i class="fa-brands fa-apple-pay fa-2x mb-2 text-dark"></i>
+                                    <span>Apple Pay</span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="payment-method-btn" onclick="switchPayment('bank', this)">
+                                    <i class="fa-solid fa-building-columns fa-2x mb-2 text-secondary"></i>
+                                    <span>تحويل</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="paymentContent" class="mb-4"></div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn-confirm">
+                                تأكيد التبرع الآن <i class="fa-solid fa-heart-pulse ms-1"></i>
+                            </button>
+
+                            <a href="/Projects/Cart" class="btn btn-outline-secondary py-3" style="border-radius: 50px; font-weight: bold; border-style: dashed;">
+                                العودة لتعديل السلة <i class="fa-solid fa-arrow-left me-1"></i>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function () {
+            renderPaymentSummary();
+            switchPayment('card', $('.payment-method-btn.active')[0]);
+        });
+
+        function switchPayment(type, element) {
+            $('.payment-method-btn').removeClass('active');
+            $(element).addClass('active');
+
+            let content = $('#paymentContent');
+            content.hide();
+            if (type === 'card') {
+                content.html(`
+                        <div class="row g-3">
+                            <div class="col-12">
+                            <label class="small fw-bold mb-1">رقم البطاقة</label>
+                                    <input type="text" class="form-control text-center fs-5" placeholder="**** ** ** ****" maxlength="16" oninput="validateNumbers(this)">
+                                </div>
+                                <div class="col-6">
+                                    <label class="small fw-bold mb-1">تاريخ الانتهاء</label>
+                                    <input type="text" class="form-control text-center fs-5" placeholder="MM / YY" maxlength="5" oninput="formatExpiry(this)">
+                                </div>
+                                <div class="col-6">
+                                    <label class="small fw-bold mb-1">رمز التحقق (CVV)</label>
+                                    <input type="text" class="form-control text-center fs-5" placeholder="123" maxlength="3" oninput="validateNumbers(this)">
+                                </div>
+                            </div>
+                        `);
+                } else if (type === 'apple') {
+                    content.html(`
+                            <div class="text-center py-3">
+                                <div class="apple-pay-mock d-inline-block w-100 shadow-sm">
+                                    <i class="fa-brands fa-apple-pay fa-3x"></i>
+                                    <div class="mt-2 fw-bold">اضغط للتأكيد بلمسة واحدة</div>
+                                </div>
+                            </div>
+                        `);
+                } else if (type === 'bank') {
+                    content.html(`
+                            <div>
+                                <h6 class="fw-bold mb-3 text-primary">الحسابات البنكية المعتمدة</h6>
+                                <div class="bank-box shadow-sm d-flex justify-content-between align-items-center">
+                                    <div><small class="text-muted">الراجحي:</small><br><strong>SA10 8000 0000 1234 5678 9012</strong></div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="copyText('SA1080000000123456789012')">نسخ</button>
+                                </div>
+                            </div>
+                        `);
+                }
+                content.fadeIn();
+            }
+
+            function validateNumbers(input) { input.value = input.value.replace(/[^0-9]/g, ''); }
+
+            function formatExpiry(input) {
+                let val = input.value.replace(/\D/g, '');
+                if (val.length > 2) input.value = val.substring(0, 2) + ' / ' + val.substring(2, 4);
+                else input.value = val;
+            }
+
+            function renderPaymentSummary() {
+                let cartData = JSON.parse(localStorage.getItem('cartItems')) || [];
+                let container = $('#paymentSummaryList');
+                let total = 0;
+                if (cartData.length === 0) { window.location.href = '/Projects/donor_home'; return; }
+                container.empty();
+                cartData.forEach(item => {
+                    total += parseFloat(item.amount);
+                    container.append(`<div class="summary-item"><span>${item.name}</span><span class="fw-bold">${parseFloat(item.amount).toLocaleString()} ريال</span></div>`);
+                });
+                $('#finalTotal').text(total.toLocaleString() + ' ريال');
+            }
+
+            $('#finalPaymentForm').submit(function (e) {
+                e.preventDefault();
+                let cartData = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+                Swal.fire({ title: 'جاري تسجيل تبرعك...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+                let formattedCart = cartData.map(item => ({ projectId: parseInt(item.id), amount: parseFloat(item.amount) }));
+
+                $.ajax({
+                    url: '/Projects/ProcessCheckout',
+                    type: 'POST',
+                    data: {
+                        name: $('#donorName').val() || "فاعل خير",
+                        phone: $('#donorPhone').val(),
+                        cartItemsJson: JSON.stringify(formattedCart)
+                    },
+                success: function () {
+                    localStorage.removeItem('cartItems');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'شكراً لتبرعكم الكريم',
+                        text: 'جعله الله في ميزان حسناتكم',
+                        confirmButtonText: 'حسناً',
+                        confirmButtonColor: '#2D4F28'
+                    }).then(() => {
+                        window.location.href = '/Projects/donor_home';
+                    });
+                },
+                    error: function () { Swal.fire('عذراً', 'حدث خطأ أثناء الاتصال بالسيرفر', 'error'); }
+                });
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Home Page";
+    var sessionName = HttpContextAccessor.HttpContext.Session.GetString("Name") ?? "الموظف";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9fbf9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header-container {
+            background: linear-gradient(to bottom, #f0f4f0, #e0eee0);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-top {
+            height: 100px;
+            position: relative;
+        }
+
+        .profile-section {
+            background-color: #2d5a27;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid rgba(255,255,255,0.2);
+            margin: 0 10px;
+        }
+
+        .btn-edit {
+            background-color: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .day-header {
+            background-color: #eaf2ea;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: #2d5a27;
+            border-radius: 5px;
+        }
+
+        .day-cell {
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            min-height: 100px;
+            padding: 10px;
+            transition: 0.4s ease-in-out;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px; 
+        }
+
+            .day-cell:hover {
+                background-color: #f0f7f0;
+                transform: scale(1.40); 
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+                z-index: 10; 
+            }
+
+        .day-number {
+            font-weight: bold;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .task-input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            font-size: 12px;
+            color: #444;
+            resize: none;
+            outline: none;
+            overflow: hidden;
+            font-family: inherit; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-top">
+            <div class="avatar">
+                <img src="~/images/gpic1.png" width="100%" alt="avatar">
+            </div>
+        </div>
+        <div class="profile-section">
+            <h2 id="userName">@sessionName</h2>
+            <a asp-action="emProfile" asp-controller="Users" class="btn-edit text-white">تعديل الملف الشخصي</a>
+        </div>
+    </div>
+
+    <div class="calendar-grid" id="calendar">
+    </div>
+
+    <script>
+        const calendar = document.getElementById('calendar');
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        let tasks = [];
+
+        async function loadTasks() {
+            try {
+                const res = await fetch('/Home/GetTasks');
+                if (!res.ok) throw new Error('فشل التحميل');
+                tasks = await res.json();
+                renderCalendar(); 
+            } catch (err) {
+                console.error("خطأ في تحميل البيانات من الخادم، سيتم استخدام LocalStorage كبديل مؤقت (أو تقويم فارغ).", err);
+             
+                tasks = [];
+                renderCalendar();
+            }
+        }
+
+        function renderCalendar() {
+            calendar.innerHTML = "";
+
+            days.forEach(day => {
+                const div = document.createElement('div');
+                div.className = 'day-header';
+                div.innerText = day;
+                calendar.appendChild(div);
+            });
+
+            for (let i = 1; i <= 31; i++) {
+                const task = tasks.find(t => t.day === i)?.text || "";
+
+                const cell = document.createElement('div');
+                cell.className = 'day-cell';
+
+                cell.innerHTML = `
+                    <span class="day-number">${i}</span>
+                    <textarea class="task-input"
+                              placeholder="أكتب مهمة..."
+                              onchange="saveTaskToServer(${i}, this.value)">${task}</textarea>
+                `;
+
+                calendar.appendChild(cell);
+            }
+        }
+
+        function saveTaskToServer(day, text) {
+            const existingTaskIndex = tasks.findIndex(t => t.day === day);
+            if (existingTaskIndex !== -1) {
+                tasks[existingTaskIndex].text = text;
+            } else {
+                tasks.push({ day: day, text: text });
+            }
+
+            fetch('/Home/SaveTask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ day: day, text: text })
+            }).then(res => {
+                if (!res.ok) {
+                    console.error("فشل حفظ المهمة على الخادم");
+                }
+            }).catch(err => {
+                console.error("خطأ في شبكة الاتصال أثناء محاولة الحفظ:", err);
+            });
+        }
+
+        loadTasks();
+    </script>
+</body>
+</html>

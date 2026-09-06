@@ -1,0 +1,217 @@
+﻿@model Ataa.Models.Projects
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "إضافة مشروع جديد";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - جمعية البيئة</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --text-green: #3d5a37;
+            --light-bg: #f8faf9;
+            --main-green: #2d4d22;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .main-wrapper {
+            flex: 1;
+            padding: 40px 20px;
+        }
+
+        .create-container {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .form-title {
+            color: var(--main-green);
+            font-weight: bold;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-label {
+            color: var(--main-green);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 12px;
+            background-color: #fcfdfc;
+            transition: 0.3s;
+        }
+
+            .form-control:focus {
+                border-color: var(--main-green);
+                box-shadow: none;
+                background-color: #fff;
+            }
+
+        .btn-submit {
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.4s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+
+        .btn-save {
+            background-color: var(--main-green);
+            color: white;
+        }
+
+        .btn-draft {
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45, 77, 34, 0.3);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <div class="create-container">
+            <h2 class="form-title">
+                <i class="bi bi-plus-circle"></i> إضافة مشروع تنموي جديد
+            </h2>
+
+            <form asp-action="Create" enctype="multipart/form-data" id="projectForm">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                @* إدخالات مخفية لضمان نجاح التحقق *@
+                <input type="hidden" asp-for="Status" id="projectStatus" value="Published" />
+                <input type="hidden" asp-for="CompletionPercentage" value="0" />
+
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Name" class="form-label">اسم المشروع</label>
+                        <input asp-for="Name" class="form-control" placeholder="مثلاً: بئر ماء في قرية..." required />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Description" class="form-label">وصف المشروع</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="اكتب تفاصيل المشروع هنا..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="TargetAmount" class="form-label">المبلغ المستهدف (ريال)</label>
+                        <input asp-for="TargetAmount" class="form-control text-center" required />
+                        <span asp-validation-for="TargetAmount" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="CurrentAmount" class="form-label">المبلغ الحالي (ريال)</label>
+                        <input asp-for="CurrentAmount" class="form-control text-center" />
+                        <span asp-validation-for="CurrentAmount" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="OrganizingEntity" class="form-label">الجهة المنظمة</label>
+                        <input asp-for="OrganizingEntity" class="form-control" required />
+                        <span asp-validation-for="OrganizingEntity" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Date" class="form-label">تاريخ البداية</label>
+                        <input asp-for="Date" type="date" class="form-control" required />
+                        <span asp-validation-for="Date" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-12 mb-4">
+                        <label asp-for="ImageFile" class="form-label">صورة المشروع</label>
+                        <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <button type="button" onclick="submitProject('Published')" class="btn-submit btn-save shadow-sm">
+                        <i class="bi bi-check-circle"></i> حفظ ونشر
+                    </button>
+                    <button type="button" onclick="submitProject('Draft')" class="btn-submit btn-draft shadow-sm">
+                        <i class="bi bi-file-earmark-text"></i> حفظ كمسودة
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">إلغاء</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function submitProject(status) {
+            console.log("بداية عملية الإرسال بحالة: " + status);
+
+            // 1. تحديث قيمة الحقل المخفي للحالة
+            var statusInput = document.getElementById('projectStatus');
+            if (statusInput) {
+                statusInput.value = status;
+            }
+
+            // 2. الحصول على الفورم
+            var form = document.getElementById('projectForm');
+
+            if (status === 'Published') {
+                // محاولة التحقق من الصحة باستخدام jQuery Validate
+                try {
+                    if ($(form).valid()) {
+                        console.log("البيانات سليمة، يتم الإرسال...");
+                        form.submit();
+                    } else {
+                        alert("يرجى تعبئة جميع الحقول المطلوبة أولاً!");
+                        // إظهار أول حقل فيه خطأ
+                        $([document.documentElement, document.body]).animate({
+                            scrollTop: $(".input-validation-error").first().offset().top - 100
+                        }, 500);
+                    }
+                } catch (e) {
+                    // في حال وجود مشكلة في مكتبة التحقق، أرسل الفورم مباشرة
+                    console.log("خطأ في التحقق، سيتم الإرسال المباشر: " + e);
+                    form.submit();
+                }
+            } else {
+                // حفظ كمسودة - إرسال مباشر دائماً
+                form.submit();
+            }
+        }
+    </script>
+</body>
+</html>

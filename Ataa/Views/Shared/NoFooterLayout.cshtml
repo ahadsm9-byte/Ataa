@@ -1,0 +1,352 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Ataa.Data.AtaaDbContext _db
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - جمعية عطاء</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #2D4F28;
+            --light-green: #b8ccb3;
+            --bg-cream: #f9f9f5;
+            --text-gray: #6b6b6b;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-header {
+            background-color: #fff;
+            border-bottom: 2px solid var(--primary-green);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+        }
+
+        .header-right, .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .site-logo {
+            height: 75px;
+        }
+
+        .contact-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary-green);
+            text-align: right;
+        }
+
+        .contact-icon-circle {
+            font-size: 18px;
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-badge {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 50%;
+            position: relative;
+            cursor: pointer;
+            color: #555;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .icon-badge:hover {
+            background: #e8e8e8;
+        }
+
+        .icon-badge .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #d9534f;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .login-btn {
+            background: var(--bg-cream);
+            padding: 8px 18px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: var(--primary-green);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #e0e0e0;
+            transition: 0.3s;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu, .user-dropdown-menu {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            right: auto;
+            background: #fff;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 2000;
+            border: 1px solid #eee;
+            overflow: hidden;
+        }
+
+        .dropdown:hover > .dropdown-menu,
+        .dropdown:hover > .user-dropdown-menu {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .user-dropdown-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--text-gray);
+            font-size: 14px;
+            transition: 0.2s;
+            border-bottom: 1px solid #f8f8f8;
+        }
+        }
+
+        .user-dropdown-menu li a:hover {
+            background-color: #f1f5f0;
+            color: var(--primary-green);
+        }
+
+        .user-dropdown-menu li:last-child a {
+            border-bottom: none;
+            color: #d9534f;
+        }
+
+        .sub-nav {
+            background-color: var(--bg-cream);
+            padding: 12px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary-green);
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        .page-content {
+            flex: 1;
+        }
+
+        .dropdown-menu li a {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .dropdown-menu li a i {
+            width: 20px;
+            color: var(--primary-green);
+            font-size: 14px;
+        }
+
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    @{
+        var sessionEmail = Context.Session.GetString("UserEmail");
+        int notifCount = 0;
+        var recentNotifs = new List<Ataa.Models.Notifications>();
+
+        if (!string.IsNullOrEmpty(sessionEmail))
+        {
+            var volunteer = _db.Volunteers.FirstOrDefault(v => v.Email == sessionEmail);
+            if (volunteer != null)
+            {
+                notifCount = _db.Notifications.Count(n => n.VolunteerId == volunteer.VolunteerID && !n.IsRead);
+                recentNotifs = _db.Notifications
+                .Where(n => n.VolunteerId == volunteer.VolunteerID)
+                .OrderByDescending(n => n.CreatedDate)
+                .Take(5).ToList();
+            }
+        }
+    }
+
+    <header class="main-header">
+        <div class="header-container">
+            <div class="header-right">
+                <a asp-controller="Users" asp-action="home"><img src="~/images/Logo.jpeg" alt="جمعية عطاء" class="site-logo"></a>
+                <div class="contact-box">
+                    <div class="contact-icon-circle"><i class="fas fa-phone-alt"></i></div>
+                    <div><span style="font-size: 11px; display: block;">اتصل بنا</span><strong>0505304076</strong></div>
+                </div>
+            </div>
+
+            <div class="header-left">
+                @if (string.IsNullOrEmpty(Context.Session.GetString("Name")))
+                {
+                    <a asp-controller="Users" asp-action="Login" class="login-btn">
+                        <i class="fas fa-user-circle"></i> تسجيل الدخول
+                    </a>
+                }
+                else
+                {
+                    <div class="dropdown">
+                        <a class="login-btn" style="cursor: pointer;">
+                            <i class="fas fa-user-circle" style="font-size: 1.2rem;"></i>
+                            <span>مرحباً، @Context.Session.GetString("Name")</span>
+                            <i class="fas fa-chevron-down" style="font-size: 10px; margin-right: 5px;"></i>
+                        </a>
+                        <ul class="user-dropdown-menu">
+                            <li><a asp-controller="Users" asp-action="Profile"><i class="fas fa-id-card"></i> ملفي الشخصي</a></li>
+                            <li><a asp-controller="Users" asp-action="Logout"><i class="fas fa-sign-out-alt"></i> خروج</a></li>
+                        </ul>
+                    </div>
+                }
+
+                <div class="icon-badge">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge" style="background: #a5d6a7;">0</span>
+                </div>
+
+                <div class="dropdown">
+                    <div class="icon-badge">
+                        <i class="fas fa-bell"></i>
+                        @if (notifCount > 0)
+                        {
+                            <span class="badge">@notifCount</span>
+                        }
+                    </div>
+                    <ul class="dropdown-menu shadow" style="width: 280px;">
+                        <li class="p-2 text-center fw-bold border-bottom" style="color: var(--primary-green);">الإشعارات</li>
+                        @if (recentNotifs.Any())
+                        {
+                            foreach (var notif in recentNotifs)
+                            {
+                                <li class="p-2 border-bottom @(notif.IsRead ? "" : "bg-light")">
+                                    <div class="small fw-bold text-dark" style="padding: 0 10px;">@notif.Message</div>
+                                    <small class="text-muted" style="font-size: 10px; padding: 0 10px;">@notif.CreatedDate.ToString("yyyy/MM/dd")</small>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="p-4 text-center text-muted small">لا توجد إشعارات حالياً</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sub-nav">
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a><i class="fas fa-th-large"></i> الخدمات <i class="fas fa-chevron-down" style="font-size: 12px;"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a asp-controller="Events" asp-action="Index">التطوع</a></li>
+                        <li><a asp-controller="Projects" asp-action="donor_home">التبرع</a></li>
+                        <li><a asp-controller="Events" asp-action="allEvent">الفعاليات</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#">حول الجمعية <i class="fas fa-chevron-down" style="font-size: 12px;"></i></a>
+                    <ul class="dropdown-menu shadow" style="width: 250px;">
+                        <li><a asp-controller="Home" asp-action="About"><i class="fas fa-info-circle ms-2"></i> من نحن</a></li>
+                        <li><a asp-controller="Home" asp-action="ExecutiveManager"><i class="fas fa-user-tie ms-2"></i> المدير التنفيذي</a></li>
+                        <li><a asp-controller="Home" asp-action="ChairmanSpeech"><i class="fas fa-comment-dots ms-2"></i> كلمة رئيس المجلس</a></li>
+                        <li class="border-top my-1"></li>
+                        <li><a asp-controller="Home" asp-action="BoardMembers"><i class="fas fa-users ms-2"></i> مجلس الإدارة</a></li>
+                        <li><a asp-controller="Home" asp-action="GeneralAssembly"><i class="fas fa-university ms-2"></i> الجمعية العمومية</a></li>
+                        <li><a asp-controller="Home" asp-action="OrganizationalChart"><i class="fas fa-sitemap ms-2"></i> الهيكل التنظيمي</a></li>
+                        <li class="border-top my-1"></li>
+                        <li><a asp-controller="Home" asp-action="Certificates"><i class="fas fa-certificate ms-2"></i> التراخيص</a></li>
+                        <li><a asp-controller="Home" asp-action="Documents"><i class="fas fa-file-pdf ms-2"></i> الوثائق والأنظمة</a></li>
+                        <li class="border-top my-1"></li>
+                        <li><a asp-controller="Home" asp-action="Awards"><i class="fas fa-trophy ms-2"></i> الجوائز</a></li>
+                        <li><a asp-controller="Home" asp-action="Partners"><i class="fas fa-handshake ms-2"></i> شركاؤنا</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#">الحوكمة <i class="fas fa-chevron-down" style="font-size: 12px;"></i></a>
+                    <ul class="dropdown-menu shadow" style="width: 220px;">
+                        <li><a asp-controller="Home" asp-action="Regulations">اللوائح والسياسات</a></li>
+                        <li><a asp-controller="Home" asp-action="AnnualReports">التقارير السنوية</a></li>
+                        <li><a asp-controller="Home" asp-action="Guides">الأدلة الإرشادية</a></li>
+                        <li><a asp-controller="Home" asp-action="GovernanceRecords">سجلات الحوكمة</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#">المركز الإعلامي <i class="fas fa-chevron-down" style="font-size: 12px;"></i></a>
+                    <ul class="dropdown-menu shadow" style="width: 220px;">
+                        <li><a asp-controller="Home" asp-action="MediaGallery"><i class="fas fa-images ms-2"></i> مكتبة الصور</a></li>
+                        <li><a asp-controller="Home" asp-action="VideoAlbum"><i class="fas fa-video ms-2"></i> مكتبة الفيديو</a></li>
+                        <li><a asp-controller="Home" asp-action="OurImpact"><i class="fas fa-heart ms-2"></i> قالوا عنا (أثرنا)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        @RenderBody()
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

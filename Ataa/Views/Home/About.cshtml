@@ -1,0 +1,137 @@
+﻿@{
+
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+    ViewData["Title"] = "نبذة عنا - عطاء";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --primary-green: #2D4F28;
+            --light-green: #5c8b4f;
+            --secondary-gold: #f4b033;
+            --bg-soft: #f4f7f4;
+        }
+
+        body {
+            background-color: var(--bg-soft);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+
+
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 6px solid var(--primary-green);
+        }
+
+        .page-subtitle {
+            color: var(--primary-green);
+            font-weight: 800;
+            border-right: 5px solid var(--secondary-gold);
+            padding-right: 15px;
+            margin-bottom: 30px;
+        }
+
+        .img-fluid-custom {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            max-width: 100%;
+            height: auto;
+            transition: 0.3s;
+        }
+
+            .img-fluid-custom:hover {
+                transform: scale(1.02);
+            }
+
+
+    </style>
+</head>
+<body>
+
+
+    <div class="about-header animate__animated animate__fadeIn">
+        <div class="container">
+            <br /><br />
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-11 info-card animate__animated animate__fadeInUp">
+
+                <div class="section-box mb-5">
+                    <h1 class="display-4 fw-bold">من نحن</h1>
+                    <p class="lead">جمعية البيئه الخيرية - عطاءٌ ينمو .. وأثرٌ يبقى</p>
+                    <h2 class="page-subtitle">نبذة عن الجمعية</h2>
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <p class="fs-5 text-muted lead lh-lg">
+                                جمعية البيئه هي مؤسسة خيرية وطنية تعنى بالعمل الإنساني والبيئي في المدينة المنورة. نسعى لتحقيق التنمية المستدامة من خلال تمكين الأسر وتقديم المبادرات النوعية التي تخدم المجتمع وتعزز قيم التكافل الاجتماعي وفق رؤية المملكة 2030.
+                            </p>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <hr class="my-5">
+
+                <div class="row text-center">
+                    <div class="col-md-4 mb-4">
+                        <h4 class="fw-bold mb-3" style="color: var(--primary-green);">الرؤية</h4>
+                        <img src="https://www.madinah-eco.org.sa/rafed/uploads/website_editor/68a1787377b776.75014941.png" class="img-fluid-custom" alt="الرؤية">
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <h4 class="fw-bold mb-3" style="color: var(--primary-green);">الرسالة</h4>
+                        <img src="https://www.madinah-eco.org.sa/rafed/uploads/website_editor/68a178aecfd766.16941126.png" class="img-fluid-custom" alt="الرسالة">
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <h4 class="fw-bold mb-3" style="color: var(--primary-green);">القيم</h4>
+                        <img src="https://www.madinah-eco.org.sa/rafed/uploads/website_editor/68f9280b1304f1.22772667.png" class="img-fluid-custom" alt="القيم">
+                    </div>
+                </div>
+
+                <div class="section-box mt-5 p-4 rounded-4" style="background-color: #fcfdfc;">
+                    <h2 class="page-subtitle">أهدافنا الاستراتيجية</h2>
+                    <div class="row align-items-center">
+                        <div class="col-md-7">
+                            <ul class="list-group list-group-flush text-end pr-0">
+                                <li class="list-group-item bg-transparent py-3"><i class="fas fa-check-circle text-success ms-2"></i> توظيف التقنية لتسهيل العمل الخيري.</li>
+                                <li class="list-group-item bg-transparent py-3"><i class="fas fa-check-circle text-success ms-2"></i> دعم ورعاية الأسر المتعففة بالمدينة المنورة.</li>
+                                <li class="list-group-item bg-transparent py-3"><i class="fas fa-check-circle text-success ms-2"></i> تعزيز الوعي البيئي والمحافظة على الموارد الطبيعية.</li>
+                                <li class="list-group-item bg-transparent py-3"><i class="fas fa-check-circle text-success ms-2"></i> تمكين المتطوعين وتطوير قدراتهم في خدمة المجتمع.</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <img src="https://www.madinah-eco.org.sa/rafed/uploads/website_editor/68a178f292ee24.54236646.png" class="img-fluid-custom" alt="الأهداف">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-5 pt-5 border-top">
+                    <p class="text-muted fw-bold mb-4">فخورون بالمساهمة في تحقيق رؤية وطننا</p>
+                    <div class="d-flexjustify-content-center flex-wrap gap-4 align-items-center">
+                        <img src="https://www.madinah-eco.org.sa/rafed/uploads/website_editor/688b11c3d2ed03.39034506.png" height="80" alt="2030">
+                        <img src="https://www.madinah-eco.org.sa/rafed/uploads/website_editor/688b12b257c712.39879841.png" height="80" alt="HRSD">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

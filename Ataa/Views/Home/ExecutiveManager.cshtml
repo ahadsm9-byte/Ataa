@@ -1,0 +1,205 @@
+﻿@model IEnumerable<dynamic>
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+
+}
+
+<style>
+    .sidebar, #sidebar-wrapper, .main-sidebar, .sidebar-container {
+        display: none !important;
+    }
+
+    .main-wrapper, .content-wrapper, #page-content-wrapper, main {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .executive-page-container {
+        background-color: #f8faf7;
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .watermark-bg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.04;
+        width: 50%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+        .watermark-bg img {
+            width: 100%;
+            filter: grayscale(1);
+        }
+
+    .main-logo {
+        height: 90px;
+        position: relative;
+        z-index: 5;
+    }
+
+    .page-main-title {
+        color: #2d4d22;
+        font-weight: 800;
+        position: relative;
+        z-index: 5;
+    }
+
+    .title-accent-line {
+        width: 60px;
+        height: 3px;
+        background: #d4af37;
+        border-radius: 2px;
+        margin-bottom: 40px;
+    }
+
+    .arrow-stack {
+        margin: 20px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        position: relative;
+        z-index: 5;
+    }
+
+        .arrow-stack i {
+            color: #2d4d22;
+            display: block;
+            line-height: 0.6;
+        }
+
+    .arrow-1 {
+        opacity: 0.3;
+        font-size: 0.7rem;
+    }
+
+    .arrow-Med {
+        opacity: 0.6;
+        font-size: 0.9rem;
+    }
+
+    .arrow-Large {
+        opacity: 1;
+        font-size: 1.1rem;
+    }
+
+    .hz-connector {
+        width: 75%;
+        height: 2px;
+        background: #ccd6cc;
+        margin: 5px auto 30px;
+        position: relative;
+        z-index: 5;
+    }
+
+        .hz-connector::before, .hz-connector::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            width: 8px;
+            height: 8px;
+            background: #2d4d22;
+            border-radius: 50%;
+        }
+
+        .hz-connector::before {
+            right: 0;
+        }
+
+        .hz-connector::after {
+            left: 0;
+        }
+
+    .emp-card {
+        background: white;
+        border-radius: 15px;
+        border: 1px solid #eef2ed;
+        transition: 0.3s;
+        position: relative;
+        z-index: 5;
+    }
+
+        .emp-card:hover {
+            transform: translateY(-5px);
+            border-color: #2d4d22;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+    .card-inner {
+        padding: 25px;
+    }
+
+    .emp-role-badge {
+        display: inline-block;
+        padding: 5px 20px;
+        border-radius: 6px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+</style>
+
+<div class="executive-page-container rtl" dir="rtl">
+    <div class="watermark-bg">
+        <img src="/images/Logo.jpeg" alt="Watermark">
+    </div>
+
+    <div class="container py-5">
+        <div class="text-center">
+            <h2 class="page-main-title">معلومات المدير التنفيذي و الموظفين</h2>
+            <div class="title-accent-line mx-auto"></div>
+        </div>
+
+        <div class="row justify-content-center g-4">
+            @if (ViewBag.TopLevel != null)
+            {
+                foreach (var emp in ViewBag.TopLevel)
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <div class="emp-card shadow-sm text-center">
+                            <div class="card-inner">
+                                <h4 class="fw-bold mb-2">@emp.Name</h4>
+                                <p class="text-muted small mb-3">@emp.Email</p>
+                                <span class="emp-role-badge" style="background-color: @emp.Color">@emp.Role</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="arrow-stack">
+            <i class="fas fa-chevron-down arrow-1"></i>
+            <i class="fas fa-chevron-down arrow-Med"></i>
+            <i class="fas fa-chevron-down arrow-Large"></i>
+        </div>
+        <div class="hz-connector"></div>
+
+        <div class="row justify-content-center g-4 mb-5">
+            @if (ViewBag.StaffLevel != null)
+            {
+                foreach (var emp in ViewBag.StaffLevel)
+                {
+                    <div class="col-lg-3 col-md-6">
+                        <div class="emp-card shadow-sm text-center">
+                            <div class="card-inner">
+                                <h6 class="fw-bold mb-1">@emp.Name</h6>
+                                <p class="text-muted small mb-2" style="font-size: 0.75rem;">@emp.Email</p>
+                                <span class="emp-role-badge small bg-secondary">@emp.Role</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>

@@ -1,0 +1,323 @@
+﻿@model Ataa.Models.Events
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-4" dir="rtl">
+    <div class="d-flex justify-content-start mb-3">
+        <a asp-action="emIndex" class="back-arrow-circle">
+            <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+    <div class="container mt-5" dir="rtl">
+        <div class="card shadow-lg border-0" style="border-radius: 20px; overflow: hidden;">
+            <div class="row g-0 d-flex align-items-stretch" style="min-height: 700px;">
+
+                <div class="col-lg-9 p-5 bg-white d-flex flex-column">
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger text-end shadow-sm">
+                            <strong>⚠️ عذراً:</strong> @ViewBag.ErrorMessage
+                        </div>
+                    }
+
+                    <form asp-action="CreateEvent" method="post" enctype="multipart/form-data" id="eventForm" class="flex-grow-1">
+
+                        <div class="step-content" id="step1">
+                            <h3 class="text-success mb-4 fw-bold">معلومات الفعالية</h3>
+                            <div class="row g-4">
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold">اسم الفعالية:</label>
+                                    <input asp-for="Name" class="form-control custom-input" placeholder="مثلاً: تنظيف شاطئ جدة" required />
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold">وصف الفعالية:</label>
+                                    <textarea asp-for="Description" class="form-control custom-input" rows="4" placeholder="اكتب تفاصيل الفعالية هنا..."></textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold">مجال الفرصة:</label>
+                                    <select asp-for="Category" class="form-select custom-input custom-select-rtl">
+                                        <option value="بيئي">بيئي</option>
+                                        <option value="تعليمي">تعليمي</option>
+                                        <option value="خيري">خيري</option>
+                                        <option value="تطوعي">تطوعي</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-content d-none" id="step2">
+                            <h3 class="text-success mb-4 fw-bold">الجدول الزمني والموقع</h3>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">الموقع (المدينة):</label>
+                                    <input asp-for="Location" class="form-control custom-input" placeholder="مثال: الرياض" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">تاريخ الفعالية:</label>
+                                    <input asp-for="Date" type="date" class="form-control custom-input" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">ساعات التطوع:</label>
+                                    <input asp-for="Hours" type="number" step="0.5" class="form-control custom-input" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-content d-none" id="step3">
+                            <h3 class="text-success mb-4 fw-bold">المتطلبات والمهارات</h3>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">العدد المطلوب:</label>
+                                    <input asp-for="Capacity" type="number" class="form-control custom-input" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">الجهة المنظمة:</label>
+                                    <input asp-for="OrganizingEntity" class="form-control custom-input" />
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold text-primary">صورة الفعالية:</label>
+                                    <input type="file" name="imageFile" class="form-control custom-input" accept="image/*" />
+                                </div>
+
+                                <div class="col-md-6 border-start">
+                                    <h6 class="fw-bold text-success mb-3"><i class="bi bi-tools"></i> المهارات المطلوبة:</h6>
+                                    <div class="options-grid">
+                                        @foreach (var skill in new[] { "التشجير والزراعة", "تنظيف الأماكن العامة", "فرز النفايات", "التخطيط والتنظيم", "التصميم الجرافيكي", "كتابة المحتوى", "تنظيم الفعاليات", "مهارات القيادة", "وسائل التواصل" })
+                                        {
+                                            <div class="form-check custom-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="skills" value="@skill" id="skill_@skill">
+                                                <label class="form-check-label" for="skill_@skill">@skill</label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="fw-bold text-success mb-3"><i class="bi bi-heart-fill"></i> الاهتمامات المرتبطة:</h6>
+                                    <div class="options-grid">
+                                        @foreach (var interest in new[] { "التشجير والحفاظ على الغابات", "نظافة الحدائق", "حماية الحيوانات", "إعادة التدوير", "الزراعة المستدامة", "التوعية البيئية", "الطاقة المتجددة" })
+                                        {
+                                            <div class="form-check custom-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="interests" value="@interest" id="int_@interest">
+                                                <label class="form-check-label" for="int_@interest">@interest</label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-content d-none" id="step4">
+                            <div class="text-center py-5">
+                                <i class="bi bi-file-earmark-check text-success" style="font-size: 5rem;"></i>
+                                <h3 class="mt-4 fw-bold">نشر الفعالية</h3>
+                                <p class="text-muted mb-5">لقد أكملت جميع البيانات، يمكنك الآن نشر الفعالية لتظهر للمتطوعين.</p>
+                                <button type="submit" class="btn btn-success btn-lg px-5 py-3 rounded-pill shadow-sm fw-bold">
+                                    <i class="bi bi-cloud-arrow-up-fill"></i> نشر الفعالية الآن
+                                </button>
+                                <div class="mt-3">
+                                    <a asp-action="emIndex" class="text-muted">إلغاء والعودة للقائمة</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto pt-4 d-flex justify-content-between border-top">
+                            <button type="button" class="btn btn-light px-4 py-2" id="prevBtn" onclick="nextPrev(-1)">السابق</button>
+                            <button type="button" class="btn btn-success px-5 py-2 fw-bold" id="nextBtn" onclick="nextPrev(1)" style="background-color: #79a391; border:none;">التالي</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-3 d-flex flex-column p-4 justify-content-center" style="background-color: #f1f4f2; border-right: 1px solid #e0e0e0;">
+                    <div class="stepper-container">
+                        <div class="step-item active" id="indicator-0">
+                            <div class="step-number">1</div>
+                            <div class="step-info">
+                                <span class="step-title">الخطوة الأولى</span>
+                                <span class="step-desc">معلومات الفعالية</span>
+                            </div>
+                        </div>
+                        <div class="step-item" id="indicator-1">
+                            <div class="step-number">2</div>
+                            <div class="step-info">
+                                <span class="step-title">الخطوة الثانية</span>
+                                <span class="step-desc">الجدول الزمني</span>
+                            </div>
+                        </div>
+                        <div class="step-item" id="indicator-2">
+                            <div class="step-number">3</div>
+                            <div class="step-info">
+                                <span class="step-title">الخطوة الثالثة</span>
+                                <span class="step-desc">معلومات عامة</span>
+                            </div>
+                        </div>
+                        <div class="step-item" id="indicator-3">
+                            <div class="step-number">4</div>
+                            <div class="step-info">
+                                <span class="step-title">الخطوة الرابعة</span>
+                                <span class="step-desc">نشر الفعالية</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .back-arrow-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border: 2px solid #2d4d22; 
+            border-radius: 50%; 
+            color: #2d4d22;
+            background-color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+            .back-arrow-circle:hover {
+                background-color: #2d4d22;
+                color: white !important;
+                transform: scale(1.1); 
+                box-shadow: 0 4px 12px rgba(45, 77, 34, 0.2);
+            }
+
+            .back-arrow-circle i {
+                font-size: 1.4rem;
+                line-height: 0;
+            }
+
+        .custom-select-rtl {
+            background-position: left 0.75rem center !important;
+            padding-left: 2.5rem !important;
+            padding-right: 0.75rem !important;
+        }
+
+        .custom-input {
+            border: none;
+            border-bottom: 2px solid #e9ecef;
+            border-radius: 0;
+            padding: 12px 5px;
+            transition: 0.3s;
+        }
+
+            .custom-input:focus {
+                box-shadow: none;
+                border-color: #28a745;
+                background-color: #fcfdfc;
+            }
+
+        .stepper-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            opacity: 0.4;
+            transition: 0.4s;
+        }
+
+            .step-item.active {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+
+        .step-info {
+            text-align: right;
+        }
+
+        .step-title {
+            display: block;
+            font-size: 0.7rem;
+            color: #777;
+            text-transform: uppercase;
+        }
+
+        .step-desc {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .step-number {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #999;
+            flex-shrink: 0; 
+        }
+
+        .step-item.active .step-number {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+            box-shadow: 0 4px 10px rgba(40,167,69,0.2);
+        }
+
+        .options-grid {
+            max-height: 180px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .custom-check .form-check-input:checked {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+    </style>
+
+    <script>
+        var currentTab = 0;
+        showTab(currentTab);
+
+        function showTab(n) {
+            var tabs = document.getElementsByClassName("step-content");
+            tabs[n].classList.remove("d-none");
+
+            document.getElementById("prevBtn").style.display = (n == 0) ? "none" : "inline";
+
+            if (n == (tabs.length - 1)) {
+                document.getElementById("nextBtn").style.display = "none";
+            } else {
+                document.getElementById("nextBtn").style.display = "inline";
+                document.getElementById("nextBtn").innerHTML = "التالي";
+            }
+            updateStepIndicators(n);
+        }
+
+        function nextPrev(n) {
+            var tabs = document.getElementsByClassName("step-content");
+
+
+            tabs[currentTab].classList.add("d-none");
+            currentTab = currentTab + n;
+            showTab(currentTab);
+        }
+
+        function updateStepIndicators(n) {
+            var indicators = document.getElementsByClassName("step-item");
+            for (var i = 0; i < indicators.length; i++) {
+                indicators[i].classList.remove("active");
+            }
+            indicators[n].classList.add("active");
+        }
+    </script>

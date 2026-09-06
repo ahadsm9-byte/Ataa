@@ -1,0 +1,164 @@
+﻿@model dynamic
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+
+}
+
+<style>
+    .sidebar, #sidebar-wrapper, .main-sidebar, .sidebar-container {
+        display: none !important;
+    }
+
+    .main-wrapper, .content-wrapper, #page-content-wrapper, main {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .speech-page-container {
+        background-color: #f8faf7;
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .watermark-bg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.08; 
+        width: 90%;
+        height: 90%; 
+        pointer-events: none;
+        z-index: 0; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .watermark-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+            filter: grayscale(100%) contrast(110%); 
+        }
+
+    .speech-card-horizontal {
+        background: white;
+        border-radius: 25px;
+        border: 1px solid #eef2ed;
+        position: relative;
+        z-index: 5;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.03);
+        overflow: hidden;
+        margin-top: 20px;
+    }
+
+    .profile-side {
+        background: linear-gradient(135deg, #2d4d22 0%, #1e3317 100%);
+        padding: 40px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .chairman-photo {
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        border: 6px solid rgba(212, 175, 55, 0.6); 
+        object-fit: cover;
+        object-position: top center;
+        margin-bottom: 25px;
+        background: #fff;
+        filter: brightness(1.1) contrast(1.05);
+        box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    .content-side {
+        padding: 50px;
+        line-height: 2;
+        color: #444;
+        text-align: justify;
+        position: relative;
+    }
+
+    .quote-icon {
+        font-size: 4rem;
+        color: #d4af37;
+        opacity: 0.1;
+        position: absolute;
+        top: 20px;
+        left: 30px;
+    }
+
+    .highlight-text {
+        color: #2d4d22;
+        font-weight: 700;
+    }
+
+    .identity-quote {
+        background: #f8faf7;
+        border-right: 5px solid #d4af37;
+        padding: 15px 25px;
+        margin: 25px 0;
+        font-weight: 800;
+        color: #2d4d22;
+        font-size: 1.1rem;
+    }
+
+</style>
+
+<div class="speech-page-container rtl" dir="rtl">
+    <div class="watermark-bg">
+        <img src="/images/Logo.jpeg" alt="Watermark">
+    </div>
+
+    <div class="container py-5">
+        <div class=" text-center mb-4">
+            <h2 style="color: #2d4d22; font-weight: 800;">كلمة رئيس مجلس الإدارة</h2>
+            <div style="width: 60px; height: 3px; background: #d4af37; margin: 0 auto;"></div>
+        </div>
+
+        <div class="speech-card-horizontal">
+            <div class="row g-0">
+                <div class="col-lg-4 profile-side">
+                    <img src="/images/chairman.jpg" class="chairman-photo" alt="أ. طه محمد هاشم الغزي">
+                    <h3 class="fw-bold mb-1">أ. طه محمد هاشم الغزي</h3>
+                    <p class="text-white-50">رئيس مجلس الإدارة</p>
+                </div>
+
+
+                <div class="col-lg-8 content-side">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <div class="watermark-bg">
+                        <img src="/images/madinah_watermark.jpg" alt="Background">
+                    </div>
+
+                    <p class="fw-bold text-center mb-4" style="color: #2d4d22; font-size: 1.2rem;">بسم الله الرحمن الرحيم</p>
+                    <p class="text-center mb-4">والصلاة والسلام على معلمنا الخير نبينا وسيدنا محمد عليه أفضل الصلاة وأتم التسليم</p>
+                    <div class="identity-quote text-center">
+                        "بيئة طيبة مستدامة بهوية إسلامية"
+                    </div>
+
+                    <div class="speech-text">
+                        بفضل الله تم إنشاء جمعية البيئة بالمدينة المنورة كأول جمعية في منطقة المدينة المنورة بتاريخ 1440/2/29هـ بتصريح من المركز الوطني لتنمية القطاع غير الربحي بالرقم 1082 واإلشراف الفني من وزارة البيئة والمياه والزراعة؛ تعنى جمعيتنا بتثقيف وتوعية مجتمع المدينة المنورة وحماية بيئتها والحفاظ على مواردها لألجيال القادمة بما يحقق مبدأ التنمية المستدامة ورؤى المملكة، كما تعنى بمكافحة التلوث والوقاية والتثقيف البيئي والصحي، وحماية الحيوان.
+                        <br><br>
+                        تعتبر قضية التلوث البيئي أحد أهم التحديات الحضارية والصحية التي يواجهها أي مجتمع، وقد حرص النبي صلى الله عليه وسلم بتوجيهات وتعاليمه على نظافة البيئة وحمايتها، مما جعلها مسئولية لكل فرد من أفراد المجتمع المسلم، ليعيش الناس في صحة جيدة، جميلة المظهر، خالية من األوبئة واألمراض للوصول لتحسين جودة حياة الفرد واألسرة من خالل تهيئة البيئة الالزمة لدعم واستحداث خيارات جديدة تعّزز مشاركة المواطن والمقيم والزائر، ويعكس كل هذا منطوق هوية الجمعية "بيئة طيبة مستدامة بهوية إسالمية.
+                        <br /><br />
+                        فترتبط صحة المجتمع واألجيال الحالية والمقبلة بحالة البيئة، باإلضافة إلى أنماط وأساليب الحياة فيها. فكلما كانت البيئة المحيطة بحياة اإلنسان اليومية خالية من التلوث والعوامل الضارة بصحة اإلنسان، كلما كانت صحة المواطن أفضل.
+                        <br /><br />
+                        وانطالقا من مبدأ رفع مستوى المشاركة المجتمعية التفاعلية لتعزيز القطاع غير الربحي وزيادة مساهمته وتمكينه من التحول نحو المؤسسية واالستدامة ومن الرعوية إلى التنموية، فقد عملت جمعيتنا جهدا كبيرًا للوصول مع باقي الجهات المسؤولة لتحقيق رؤية المملكة 2030.
+                        <br><br>
+                        يشارك أعضاء الشرف ذوو الخبرة العريضة وأعضاء اللجان البيئية من ذوي المعرفة الجمعية في حمل الهم البيئي، حيث تضم جمعيتنا نخبة من أبناء منطقة المدينة المنورة ممن لديهم المعرفة والنشاط في مجال حماية البيئة.
+                    </div>
+                </div>
+            </div>
+        </div>

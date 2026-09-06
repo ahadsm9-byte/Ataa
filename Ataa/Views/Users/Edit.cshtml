@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Ataa.Models.Users>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container py-4" dir="rtl">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 style="color: #2d5a27; font-weight: bold;">إدارة المستخدمين</h2>
+        <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">إضافة جديد</a>
+    </div>
+
+    <div class="card shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
+        <table class="table table-hover text-center mb-0">
+            <thead style="background-color: #2d5a27; color: white;">
+                <tr>
+                    <th>الاسم</th>
+                    <th>البريد</th>
+                    <th>العمليات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Email</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-success btn-sm rounded-pill px-3"
+                                    onclick="openEditModal('@item.Id', '@item.Name', '@item.Email', '@item.Password', '@item.Role')">
+                                تعديل
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg" style="border-radius: 40px; border: none; padding: 20px;">
+            <div class="modal-body text-end" dir="rtl">
+                <h1 class="text-center mb-4" style="color: #d1ddd0; font-size: 3rem; font-weight: 200;">التعديل</h1>
+                <form id="editUserForm">
+                    <input type="hidden" name="Id" id="edit_id" />
+                    <input type="hidden" name="Role" id="edit_role" />
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">الاسم</label>
+                        <input type="text" name="Name" id="edit_name" class="form-control border-0 bg-light rounded-pill px-4 text-center shadow-none" style="height: 50px;">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">البريد الإلكتروني</label>
+                        <input type="email" name="Email" id="edit_email" class="form-control border-0 bg-light rounded-pill px-4 text-center shadow-none" style="height: 50px;">
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label fw-bold">الرقم السري</label>
+                        <input type="password" name="Password" id="edit_password" class="form-control border-0 bg-light rounded-pill px-4 text-center shadow-none" style="height: 50px;">
+                    </div>
+
+                    <div class="text-center">
+                        <button type="button" onclick="submitEditForm()" class="btn btn-outline-success rounded-pill px-5 py-2" style="font-weight: bold;">حفظ التعديلات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openEditModal(id, name, email, password, role) {
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_name').value = name;
+            document.getElementById('edit_email').value = email;
+            document.getElementById('edit_password').value = password;
+            document.getElementById('edit_role').value = role;
+
+            var myModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+            myModal.show();
+        }
+
+        function submitEditForm() {
+            const formData = newFormData(document.getElementById('editUserForm'));
+
+            fetch('/Users/Edit/' + document.getElementById('edit_id').value, {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                if (response.ok) {
+                    var modalEl = document.getElementById('editUserModal');
+                    var modal = bootstrap.Modal.getInstance(modalEl);
+                    modal.hide();
+
+                    Swal.fire({
+                        title: 'تم بنجاح!',
+                        text: 'لقد تم تحديث بيانات المستخدم بنجاح.',
+                        icon: 'success',
+                        confirmButtonText: 'ممتاز',
+                        confirmButtonColor: '#2d5a27'
+                    }).then(() => {
+                        location.reload(); 
+                    });
+                } else {
+                    Swal.fire('خطأ!', 'حدثت مشكلة أثناء الحفظ.', 'error');
+                }
+            });
+        }
+    </script>
+}

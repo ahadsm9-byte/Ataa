@@ -1,0 +1,235 @@
+﻿@model dynamic
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+
+}
+
+<style>
+    .sidebar, #sidebar-wrapper, .main-sidebar, .sidebar-container {
+        display: none !important;
+    }
+
+    .main-wrapper, .content-wrapper, #page-content-wrapper, main {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .board-page-container {
+        background-color: #f8faf7;
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding-bottom: 80px;
+    }
+
+    .page-watermark {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 85%;
+        opacity: 0.05;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+        .page-watermark img {
+            width: 100%;
+            max-width: 1000px;
+            filter: grayscale(100%);
+        }
+
+    .section-header {
+        position: relative;
+        z-index: 10;
+        margin-bottom: 50px;
+        padding-top: 50px;
+    }
+
+        .section-header h1 {
+            color: #2d4d22;
+            font-weight: 900;
+            font-size: 2.8rem;
+        }
+
+        .section-header .line {
+            width: 120px;
+            height: 5px;
+            background: #d4af37;
+            margin: 15px auto;
+            border-radius: 5px;
+        }
+
+    .members-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        position: relative;
+        z-index: 5;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .member-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        text-align: center;
+        border: 1px solid #eef2ed;
+        transition: 0.3s;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+    }
+
+        .member-card:hover {
+            transform: translateY(-8px);
+            border-color: #d4af37;
+            box-shadow: 0 15px 30px rgba(45, 77, 34, 0.08);
+        }
+
+    .member-img-wrapper {
+        width: 130px;
+        height: 130px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        padding: 5px;
+        border: 3px solid #d4af37;
+    }
+
+    .member-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #f0f0f0;
+    }
+
+    .member-name {
+        color: #2d4d22;
+        font-weight: 800;
+        font-size: 1.15rem;
+        margin-bottom: 5px;
+    }
+
+    .member-role {
+        background: #f1f5f0;
+        color: #2d4d22;
+        padding: 4px 15px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        display: inline-block;
+    }
+
+    .leader-row {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+
+    .leader-card {
+        width: 100%;
+        max-width: 400px;
+        border: 2px solid #2d4d22;
+        background: #fff;
+    }
+
+ 
+</style>
+
+<div class="board-page-container rtl" dir="rtl">
+
+    <div class="page-watermark">
+        <img src="/images/Logo.jpeg" alt="Watermark">
+    </div>
+
+    <div class="container">
+        <div class="section-header text-center">
+            <h1>أعضاء مجلس الإدارة</h1>
+            <h5 class="text-muted">للدورة (1444 - 1448 هـ)</h5>
+            <div class="line"></div>
+        </div>
+
+        <div class="members-grid">
+
+            <div class="leader-row">
+                <div class="member-card leader-card">
+                    <div class="member-img-wrapper">
+                        <img src="/images/chairman.jpg" class="member-img" alt="طه الغزي">
+                    </div>
+                    <div class="member-name">أ. طه محمد هاشم الغزي</div>
+                    <div class="member-role">رئيس مجلس الإدارة</div>
+                </div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-img-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=M+T&background=2d4d22&color=fff&size=128" class="member-img">
+                </div>
+                <div class="member-name">أ. محمد توفيق الأيوبي</div>
+                <div class="member-role">نائب رئيس مجلس الإدارة</div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-img-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=B+A&background=2d4d22&color=fff&size=128" class="member-img">
+                </div>
+                <div class="member-name">أ. بسام عبدالستار الميمني</div>
+                <div class="member-role">عضو مجلس ادارة</div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-img-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=N+A&background=2d4d22&color=fff&size=128" class="member-img">
+                </div>
+                <div class="member-name">أ. ندا عبدالله الياس</div>
+                <div class="member-role">عضو مجلس إدارة</div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-img-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=Z+Z&background=2d4d22&color=fff&size=128" class="member-img">
+                </div>
+                <div class="member-name">أ. زينب زكي الفل</div>
+                <div class="member-role">عضو مجلس إدارة</div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-img-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=K+B&background=2d4d22&color=fff&size=128" class="member-img">
+                </div>
+                <div class="member-name">أ. خالد بكر كمال</div>
+                <div class="member-role">عضو مجلس إدارة</div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-img-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=A+T&background=2d4d22&color=fff&size=128" class="member-img" alt="عبدالله تركي التركي">
+                </div>
+                <div class="member-name">أ. عبدالله تركي التركي</div>
+                <div class="member-role">عضو مجلس إدارة</div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-img-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=B+S&background=2d4d22&color=fff&size=128" class="member-img" alt="بدر مبروك الصيعري">
+                </div>
+                <div class="member-name">أ. بدر مبروك الصيعري</div>
+                <div class="member-role">عضو مجلس إدارة</div>
+            </div>
+          
+            <div class="member-card">
+                <div class="member-img-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=K+S&background=2d4d22&color=fff&size=128" class="member-img" alt="خالد معيض الصاعدي">
+                </div>
+                <div class="member-name">أ. خالد معيض الصاعدي</div>
+                <div class="member-role">عضو مجلس إدارة</div>
+            </div>
+
+        </div>
+    </div>
+</div>

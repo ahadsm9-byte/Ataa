@@ -1,0 +1,127 @@
+﻿@model IEnumerable<Ataa.Models.Events>
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+}
+<style>
+    .archive-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        padding: 20px;
+    }
+
+    .success-card {
+        background: white;
+        border: 1.5px solid #c5d9c0;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: 0.3s;
+        cursor: pointer;
+        text-decoration: none !important;
+        display: block;
+    }
+
+        .success-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(45, 77, 34, 0.1);
+        }
+
+    .card-img-container {
+        height: 200px;
+        position: relative;
+    }
+
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .card-info {
+        padding: 15px;
+        text-align: center;
+    }
+
+        .card-info h5 {
+            color: #2d4d22;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .card-info span {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+    .go-btn {
+        background: #2d4d22;
+        color: white;
+        width: 40px; 
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px auto;
+        transition: 0.3s;
+        font-size: 14px; 
+    }
+
+    .success-card:hover .go-btn {
+        background: #b8ccb3; 
+        color: #2d4d22;
+    }
+
+    .intro-section {
+        background: linear-gradient(135deg,#1f4d2b,#2d7a45);
+        padding: 30px 20px;
+        border-radius: 20px;
+        margin-bottom: 40px;
+    }
+
+    .intro-title {
+        color: white;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .intro-text {
+        color: white;
+        font-size: 1rem;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    body {
+        background: #f4f7f4;
+    }
+</style>
+
+<div class="container mt-5" dir="rtl">
+    <div class="intro-section text-center mb-4">
+        <h1 class="intro-title">سجل الإنجازات</h1>
+        <p class="intro-text">
+            نعرض لكم أبرز قصص النجاح والإنجازات التي حققتها فعالياتنا،
+            تقديرًا للجهود المبذولة وتأثيرها الإيجابي في المجتمع.
+        </p>
+    </div>
+
+    <div class="archive-grid">
+        @foreach (var item in Model)
+        {
+            <a asp-action="SuccessStory" asp-route-id="@item.Id" class="success-card">
+                <div class="card-img-container">
+                    <img src="@item.Image" onerror="this.src='/images/default.jpg'">
+                </div>
+                <div class="card-info">
+                    <h5>@item.Name</h5>
+                    <span>@item.Date.ToString("d MMMM yyyy")</span>
+                    <div class="go-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>

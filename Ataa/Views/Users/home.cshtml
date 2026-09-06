@@ -1,0 +1,431 @@
+﻿@model IEnumerable<dynamic>
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<style>
+    body {
+        font-family: 'Tajawal',sans-serif;
+        background: #f4f8f4;
+        overflow-x: hidden;
+    }
+
+    .hero {
+        position: relative;
+        background: linear-gradient(135deg,#0f3d22,#1f5c34,#2d7a45);
+        color: white;
+        padding: 140px 0 120px;
+        border-radius: 0 0 60px 60px;
+        overflow: hidden;
+    }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            top: -200px;
+            left: -200px;
+        }
+
+        .hero h1 {
+            font-weight: 900;
+            font-size: 48px;
+            text-shadow: 0 5px 25px rgba(0,0,0,0.4);
+        }
+
+    .hero-btn {
+        background: white;
+        color: #1f4d2b;
+        padding: 14px 40px;
+        border-radius: 15px;
+        font-weight: bold;
+        transition: .3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .hero-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            color: #1f4d2b;
+        }
+
+    .stats {
+        margin-top: -70px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .stat-card {
+        backdrop-filter: blur(12px);
+        background: rgba(255,255,255,0.9);
+        border-radius: 20px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        transition: .4s;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+        }
+
+    .stat-number {
+        font-size: 32px;
+        font-weight: 900;
+        margin-bottom: 5px;
+    }
+
+    .stat-title {
+        color: #666;
+        font-weight: 700;
+    }
+
+    .partners-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 40px 0;
+        direction: ltr;
+    }
+
+    .partners-track-container {
+        overflow: hidden;
+        width: 100%;
+        white-space: nowrap;
+        scroll-behavior: smooth;
+        padding: 10px 0;
+    }
+
+    .partners-track {
+        display: flex;
+        gap: 30px;
+    }
+
+    .partner-logo-item {
+        min-width: 200px;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+        border-radius: 15px;
+        padding: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: 0.3s;
+    }
+
+        .partner-logo-item img {
+            max-height: 60px;
+            max-width: 150px;
+            filter: none;
+            opacity: 1;
+            transition: 0.3s;
+        }
+
+        .partner-logo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+            .partner-logo-item:hover img {
+                filter: none;
+                opacity: 1;
+            }
+
+    .nav-btn {
+        background-color: #1f4d2b;
+        color: white;
+        border: none;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transition: 0.3s;
+        flex-shrink: 0;
+    }
+
+        .nav-btn:hover {
+            background-color: #2d7a45;
+            transform: scale(1.1);
+        }
+
+    .prev-btn {
+        margin-right: 15px;
+    }
+
+    .next-btn {
+        margin-left: 15px;
+    }
+
+    .e-services-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 40px 0;
+        flex-wrap: wrap;
+    }
+
+    .e-service-btn {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 50px;
+        padding: 12px 45px;
+        color: #1f4d2b;
+        font-weight: bold;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        transition: all 0.3s ease;
+        min-width: 160px;
+        text-align: center;
+    }
+
+        .e-service-btn:hover {
+            background: #1f4d2b;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+    .about-box {
+        background: white;
+        padding: 60px 40px;
+        border-radius: 50px;
+        box-shadow: 0 15px 45px rgba(0,0,0,0.03);
+        margin: 60px 0;
+    }
+
+    .about-header {
+        border-right: 8px solid #1f4d2b;
+        padding-right: 25px;
+        margin-bottom: 40px;
+    }
+
+        .about-header h2 {
+            font-weight: 900;
+            color: #1f4d2b;
+            font-size: 36px;
+        }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .info-card {
+        background: #fdfdfd;
+        border: 1px solid #f1f1f1;
+        padding: 25px;
+        border-radius: 25px;
+        transition: 0.3s;
+    }
+
+        .info-card:hover {
+            background: #f4f8f4;
+            border-color: #1f4d2b;
+            transform: translateY(-5px);
+        }
+
+    .section-title {
+        font-weight: 900;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #1f4d2b;
+    }
+
+    .initiative {
+        padding: 40px;
+        border-radius: 25px;
+        color: white;
+        transition: .4s;
+    }
+
+    .initiative-1 {
+        background: linear-gradient(135deg,#2d7a45,#4fa66a);
+    }
+
+    .initiative-2 {
+        background: linear-gradient(135deg,#1f5c34,#2d7a45);
+    }
+
+    .initiative-3 {
+        background: linear-gradient(135deg,#0f3d22,#1f5c34);
+    }
+
+    .cta {
+        background: linear-gradient(to left,#1f4d2b,#0f3d22);
+        color: white;
+        padding: 80px 30px;
+        text-align: center;
+    }
+
+    .cta-btn {
+        background: white;
+        color: #1f4d2b;
+        padding: 14px 35px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: .3s;
+        display: inline-block;
+    }
+</style>
+
+<section class="hero text-center">
+    <div class="container animate__animated animate__fadeIn">
+        <h1>معاً نصنع أثراً بيئياً مستداماً</h1>
+        <p class="mt-3">جمعية البيئة بالمدينة المنورة تعمل على بناء مجتمع واعٍ بيئياً وفق رؤية 2030</p>
+        <div class="mt-4">
+            <a asp-controller="Users" asp-action="Registration" class="hero-btn">انضم كمتطوع</a>
+            <a asp-controller="Projects" asp-action="donor_home" class="hero-btn ms-2">ادعم المبادرات</a>
+        </div>
+    </div>
+</section>
+
+<section class="stats container">
+    <div class="row g-4 justify-content-center">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3">
+                <div class="stat-card animate__animated animate__zoomIn">
+                    <div class="stat-number" style="color: @item.Color">
+                        @if (item.Title == "التبرعات")
+                        {
+                            <span>@item.Value.ToString("N0") ريال</span>
+                        }
+                        else
+                        {
+                            <span>@item.Value</span>
+                        }
+                    </div>
+                    <div class="stat-title">@item.Title</div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<div class="container mt-5 text-center">
+    <h2 class="section-title">الخدمات الإلكترونية</h2>
+    <div class="e-services-container">
+        <a asp-controller="Events" asp-action="Index" class="e-service-btn">التطوع</a>
+        <a asp-controller="Projects" asp-action="donor_home" class="e-service-btn">التبرع</a>
+        <a asp-controller="Events" asp-action="allEvent" class="e-service-btn">الفعاليات</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="about-box">
+        <div class="about-header">
+            <h2>نبذة عنا</h2>
+            <p>تعرّف على المسيرة القانونية والنطاق الجغرافي للجمعية</p>
+        </div>
+        <div class="info-grid">
+            <div class="info-card"><i>🏛️</i><h5>التأسيس والنظام</h5><p>تأسست الجمعية طبقاً لأحكام لائحة الجمعيات والمؤسسات الخيرية رقم (107).</p></div>
+            <div class="info-card"><i>📝</i><h5>السجل الرسمي</h5><p>مسجلة بالسجل الخاص بالجمعيات الأهلية بالرقم (1082).</p></div>
+            <div class="info-card"><i>🗺️</i><h5>نطاق الخدمات</h5><p>تشمل المدينة المنورة، ينبع، بدر، العلا، ومناطق أخرى.</p></div>
+            <div class="info-card"><i>🌿</i><h5>تصنيف الجهة</h5><p>منظمات تُعنى بالمحافظة على البيئة ومكافحة التلوث.</p></div>
+        </div>
+    </div>
+</div>
+
+<section class="py-5 bg-white">
+    <div class="container">
+        <h2 class="section-title">شركاؤنا المميزون</h2>
+        <div class="partners-wrapper">
+            <button class="nav-btn next-btn" onclick="moveSlide(1)">&#10095;</button>
+
+            <div class="partners-track-container" id="trackContainer">
+                <div class="partners-track" id="partnersTrack">
+                    <div class="partner-logo-item"><img src="~/images/SAE.jpg" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/taibah.png" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/امانة المدينة.png" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/الجامعة الاسلامية.jpg" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/المركز الوطني.png" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/جمعية.png" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/طيبة.jpg" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/كفاءات.jpg" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/مجلس حي.jpg" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/مركز.jpg" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/وزارة التعليم.png" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/فرسان.jpg" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/مركز بحوث.jpeg" alt="Partner"></div>
+                    <div class="partner-logo-item"><img src="~/images/هايكنج.jpg" alt="Partner"></div>
+                </div>
+            </div>
+
+            <button class="nav-btn prev-btn" onclick="moveSlide(-1)">&#10094;</button>
+        </div>
+    </div>
+</section>
+
+<section class="container py-5">
+    <h2 class="section-title">مبادراتنا البيئية</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="initiative initiative-1">
+                <h5>التشجير الحضري</h5>
+                <p>زيادة المساحات الخضراء وتحسين جودة الهواء في المدينة.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="initiative initiative-2">
+                <h5>التوعية المجتمعية</h5>
+                <p>برامج تثقيفية في المدارس والجامعات لتعزيز السلوك البيئي.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="initiative initiative-3">
+                <h5>حملات النظافة</h5>
+                <p>تنظيم فعاليات تطوعية للحفاظ على نظافة الأماكن العامة.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <h3>كن جزءاً من مستقبل بيئي أفضل</h3>
+    <p class="mt-3">مشاركتك اليوم تصنع الفرق غداً</p>
+    <div class="mt-4">
+        <a asp-controller="Events" asp-action="Index" class="cta-btn">ابدأ الآن</a>
+    </div>
+</section>
+
+<script>
+    function moveSlide(direction) {
+        const container = document.getElementById('trackContainer');
+        const scrollAmount = 230;
+
+        container.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+
+    const container = document.getElementById('trackContainer');
+    let isMouseOver = false;
+
+    container.addEventListener('mouseenter', () => isMouseOver = true);
+    container.addEventListener('mouseleave', () => isMouseOver = false);
+
+    setInterval(() => {
+        if (!isMouseOver) {
+            if (container.scrollLeft + container.offsetWidth >= container.scrollWidth - 1) {
+                container.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                container.scrollBy({ left: 1, behavior: 'auto' });
+            }
+        }
+    }, 30);
+</script>

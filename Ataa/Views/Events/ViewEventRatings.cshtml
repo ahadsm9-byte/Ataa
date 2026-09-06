@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Ataa.Models.EventRegistrations>
+
+<style>
+    .main-card {
+        background-color: #ffffff;
+        border-radius: 40px; 
+        padding: 50px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        margin-top: 30px;
+    }
+
+    .title-grey {
+        color: #d1d1d1;
+        font-weight: 300;
+        font-size: 2.8rem;
+        margin-bottom: 30px;
+    }
+
+    .header-row {
+        display: flex;
+        justify-content: space-around;
+        padding: 15px 0;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .header-item {
+        color: #2D4F28;
+        font-weight: bold;
+        flex: 1;
+        text-align: center;
+    }
+
+    .data-row {
+        background-color: #f9f9f6; 
+        border-radius: 25px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 20px 0;
+        margin-bottom: 15px; 
+        transition: 0.3s;
+    }
+
+    .data-item {
+        color: #a0a0a0; 
+        flex: 1;
+        text-align: center;
+        font-size: 1.1rem;
+    }
+
+    .star-active {
+        color: #FFC107;
+        margin: 0 2px;
+    }
+
+    .star-grey {
+        color: #e6e6e6;
+        margin: 0 2px;
+    }
+
+    .btn-return {
+        border: 1.5px solid #2D4F28;
+        color: #2D4F28;
+        border-radius: 50px;
+        padding: 8px 30px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="container text-center py-5" dir="rtl">
+    <h1 class="title-grey">التقييمات</h1>
+
+    <div class="main-card shadow-sm">
+        <div class="header-row">
+            <div class="header-item">اسم المتطوع</div>
+            <div class="header-item">الفعالية</div>
+            <div class="header-item">التقييم</div>
+        </div>
+
+        @if (Model != null)
+        {
+            foreach (var reg in Model)
+            {
+                <div class="data-row">
+                    <div class="data-item">@reg.Volunteer?.Name</div>
+                    <div class="data-item">@reg.Event?.Name</div>
+                    <div class="data-item">
+                        @if (reg.Rating > 0)
+                        {
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="fas fa-star @(i <= reg.Rating ? "star-active" : "star-grey")"></i>
+                            }
+                        }
+                        else
+                        {
+                            <span style="color: #d1d1d1; font-style: italic; font-size: 0.9rem;">لم يقيم بعد</span>
+                        }
+                    </div>
+                </div>
+            }
+        }
+
+        <div class="text-start">
+            <a asp-action="Rating" class="btn-return">عودة للكل</a>
+        </div>
+    </div>
+</div>

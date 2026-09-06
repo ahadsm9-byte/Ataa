@@ -1,0 +1,126 @@
+﻿@model dynamic
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+
+}
+
+<style>
+    .sidebar, #sidebar-wrapper, .main-sidebar {
+        display: none !important;
+    }
+
+    .main-wrapper, .content-wrapper, main {
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .awards-bg {
+        background: linear-gradient(rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.94)), url('/images/madinah_watermark.jpg');
+        background-size: cover;
+        background-attachment: fixed;
+        min-height: 100vh;
+        padding: 60px 15px;
+        direction: rtl;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    .header-section {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+        .header-section h1 {
+            color: #b89146;
+            font-weight: 900;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+
+        .header-section p {
+            color: #2d4d22;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+    .award-group-title {
+        color: #1d4d2b;
+        font-weight: 800;
+        font-size: 1.5rem;
+        margin: 40px 0 20px;
+        border-right: 5px solid #b89146;
+        padding-right: 15px;
+    }
+
+    .award-card {
+        background: white;
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        transition: 0.3s;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #f0f0f0;
+    }
+
+        .award-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 25px rgba(184, 145, 70, 0.15);
+        }
+
+        .award-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+   
+</style>
+
+<div class="awards-bg">
+    <div class="container">
+
+        <div class="header-section">
+            <h1>جوائز التميز</h1>
+            <p>لحظات الفخر والإنجاز في مسيرة جمعية البيئة</p>
+        </div>
+
+        <h2 class="award-group-title">دروع التقدير والتميز</h2>
+        <div class="row g-4">
+            <div class="col-md-4 col-6">
+                <div class="award-card">
+                    <img src="https://www.madinah-eco.org.sa/rafed/uploads/website_editor/688c4501c95301.71267323.jpg" alt="درع تقدير">
+                </div>
+            </div>
+            <div class="col-md-4 col-6">
+                <div class="award-card">
+                    <img src="https://www.madinah-eco.org.sa/rafed/uploads/website_editor/688fdd4732e175.80060948.jpg" alt="درع تميز">
+                </div>
+            </div>
+        </div>
+
+        <h2 class="award-group-title">شهادات الشكر والتقدير</h2>
+        <div class="row g-3">
+            @{
+                string[] certs = {
+                        "688c46f1af5fa3.03001915.jpg", "688c47154e3b33.62133869.jpg",
+                        "688c476cb010e0.18466323.jpg", "688c479a5a2328.55100178.png",
+                        "688c47cd0eeeb4.86122641.png", "688c47f4b15830.74931229.png",
+                        "688c48229629b4.62698517.png", "688c4853302118.26475601.png",
+                        "688c487741b945.51087260.jpg", "688c48aebdf896.60984540.png"
+                        };
+            }
+
+            @foreach (var imgName in certs)
+            {
+                <div class="col-lg-2 col-md-3 col-4">
+                    <div class="award-card">
+                        <img src="https://www.madinah-eco.org.sa/rafed/uploads/website_editor/@imgName" alt="شهادة شكر">
+                    </div>
+                </div>
+            }
+        </div>
+
+      

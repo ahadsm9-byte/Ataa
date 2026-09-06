@@ -1,0 +1,198 @@
+﻿@model IEnumerable<Ataa.Models.Users>
+
+@{
+    ViewData["Title"] = "إدارة المتطوعين";
+}
+
+<style>
+    :root {
+        --text-green: #3d5a37;
+        --light-bg: #f8faf9;
+        --main-green: #2d4d22;
+    }
+
+    .table-container {
+        overflow: visible !important;
+        position: relative;
+    }
+
+    .main-wrapper {
+        padding: 20px;
+        padding-bottom: 100px;
+    }
+
+    .page-title {
+        color: #a3c5a1;
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .search-input {
+        border-radius: 25px;
+        border: 1px solid #eee;
+        padding: 12px;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto 30px;
+        display: block;
+    }
+
+    .volunteer-table {
+        width: 100%;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .volunteer-table th {
+            background-color: #fff;
+            color: #a3c5a1;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .volunteer-table td {
+            padding: 12px;
+            text-align: center;
+            color: #777;
+            border-top: 1px solid #f1f1f1;
+        }
+
+    .btn-submit-custom {
+        background-color: var(--main-green);
+        color: white;
+        border-radius: 25px;
+        padding: 10px 30px;
+        border: none;
+        transition: 0.3s;
+    }
+
+    .dropdown-menu {
+        text-align: right;
+        border: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+</style>
+<div class="main-wrapper">
+    <h1 class="page-title">قائمة المتطوعين</h1>
+
+    <input type="text" id="vSearch" class="search-input" placeholder="البحث عن متطوع...">
+
+    <div class="mb-3">
+        <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#addVolunteerModal" style="color: var(--text-green); font-weight: bold; border:none; background:none;">
+            <i class="bi bi-plus-circle-fill ms-1"></i> اضافة متطوع
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table class="volunteer-table">
+            <thead>
+                <tr>
+                    <th style="width: 50px;">الخيارات</th>
+                    <th>الايميل</th>
+                    <th>اسم المتطوع</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    @foreach (var vol in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-dark p-0 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu shadow">
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="openDeleteModal('@vol.Id', '@vol.Name')">
+                                                <i class="bi bi-trash ms-2"></i> حذف
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>@vol.Email</td>
+                            <td>@vol.Name</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="addVolunteerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0" style="border-radius: 20px;">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" style="color: var(--main-green);">إضافة متطوع جديد</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/Users/AddVolunteer" method="post">
+                <input type="hidden" name="Role" value="volunteer" />
+                <div class="modal-body px-4">
+                    <div class="mb-3 text-end">
+                        <label class="form-label fw-bold">اسم المتطوع</label>
+                        <input type="text" name="Name" class="form-control rounded-pill shadow-sm" required>
+                    </div>
+                    <div class="mb-3 text-end">
+                        <label class="form-label fw-bold">الايميل</label>
+                        <input type="email" name="Email" class="form-control rounded-pill shadow-sm" required>
+                    </div>
+                    <div class="mb-3 text-end">
+                        <label class="form-label fw-bold">الرقم السري</label>
+                        <input type="password" name="Password" class="form-control rounded-pill shadow-sm" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center pb-4">
+                    <button type="submit" class="btn btn-submit-custom shadow-sm">إضافة متطوع</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+            <div class="modal-body text-center p-4">
+                <i class="bi bi-exclamation-circle text-danger" style="font-size: 3rem;"></i>
+                <h5 class="mt-2 fw-bold">تأكيد الحذف</h5>
+                <p class="text-muted">هل تريد حذف المتطوع: <strong id="del-name"></strong>؟</p>
+                <form id="del-form" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="Id" id="del-id" />
+                    <div class="d-flex justify-content-center gap-2 mt-3">
+                        <button type="submit" class="btn btn-danger rounded-pill px-4">حذف</button>
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#vSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".volunteer-table tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+        function openDeleteModal(id, name) {
+            document.getElementById('del-id').value = id;
+            document.getElementById('del-name').innerText = name;
+            document.getElementById('del-form').action = '/Users/DeleteConfirmed/' + id;
+            new bootstrap.Modal(document.getElementById('deleteConfirmModal')).show();
+        }
+    </script>
+}

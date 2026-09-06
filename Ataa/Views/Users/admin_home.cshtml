@@ -1,0 +1,130 @@
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<dynamic>
+@{
+    var userName = Context.Session.GetString("Name") ?? "مدير النظام";
+}
+
+<style>
+    :root {
+        --text-green: #3d5a37;
+        --light-bg: #f8faf9;
+        --chart-empty: #e0eadd;
+        --border-color: #d7e6d2;
+    }
+
+    .main-wrapper {
+        padding: 20px;
+    }
+
+    .banner-section {
+        background: #ffffff;
+        border-radius: 20px;
+        margin-bottom: 40px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .single-banner-img {
+        height: 380px;
+        object-fit: cover;
+        width: 100%;
+        display: block;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 25px 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+        }
+
+    .stat-title {
+        font-weight: bold;
+        color: var(--text-green);
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+    }
+
+    .donut-chart {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        position: relative;
+    }
+
+        .donut-chart::before {
+            content: "";
+            position: absolute;
+            width: 125px;
+            height: 125px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+    .stat-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 2;
+    }
+
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--text-green);
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="main-wrapper" dir="rtl">
+    <div class="mb-4">
+        <h4 class="mb-0 fw-bold" style="color: var(--text-green);">
+            مرحباً بك @userName
+        </h4>
+    </div>
+
+    <div class="banner-section">
+        <img src="~/images/KSA.jpeg" class="single-banner-img" alt="Banner" asp-append-version="true">
+    </div>
+
+    <div class="container-fluid mb-5">
+        <div class="row g-4 justify-content-center">
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <div class="col-md-3 text-center mb-4">
+                        <div class="stat-card">
+                            <div class="stat-title">@item.Title</div>
+                            <div class="donut-chart" style="background: conic-gradient(@item.Color 0% 75%, var(--chart-empty) 75% 100%);">
+                                <div class="stat-content">
+                                    <span class="stat-value">@item.Value</span>
+                                    <small class="stat-label">إجمالي</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

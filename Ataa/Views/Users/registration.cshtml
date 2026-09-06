@@ -1,0 +1,347 @@
+﻿@model Volunteers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>إنشاء حساب متطوع - عطاء</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+
+    <style>
+        :root {
+            --primary-green: #2D4F28;
+            --leaf-green: #4CAF50;
+            --soft-green: rgba(232, 245, 233, 0.1);
+            --accent-green: #81c784;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('/Images/re.jpg') center/cover no-repeat fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+            body::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: rgba(0,0,0,0.55);
+                z-index: 0;
+            }
+
+        .main-card {
+            position: relative;
+            z-index: 1;
+            width: 1000px;
+            height: 680px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            flex-direction: row-reverse;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .left-side {
+            flex: 1;
+            background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('/Images/re.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .right-side {
+            flex: 1.3;
+            padding: 30px 50px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            color: white;
+        }
+
+        .header-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #c8e6c9;
+            font-size: 35px;
+            margin-bottom: 10px;
+            border: 2px solid var(--accent-green);
+        }
+
+        h2 {
+            color: white;
+            font-weight: 800;
+            font-size: 1.6rem;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+            .form-group i {
+                position: absolute;
+                bottom: 12px;
+                right: 10px;
+                color: #c8e6c9;
+            }
+
+            .form-group input:not([type="radio"]):not([type="checkbox"]) {
+                width: 100%;
+                border: none;
+                border-bottom: 2px solid rgba(255,255,255,0.4);
+                background: rgba(255,255,255,0.1);
+                padding: 10px 40px 10px 10px;
+                font-size: 0.95rem;
+                outline: none;
+                text-align: right;
+                transition: 0.3s;
+                color: white;
+            }
+
+            .form-group input::placeholder {
+                color: #e0f2e9;
+            }
+
+            .form-group input:focus {
+                border-bottom-color: var(--leaf-green);
+                background: rgba(255,255,255,0.2);
+            }
+
+        .btn-custom{background: var(--leaf-green);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+            .btn-custom:hover {
+                background: #66bb6a;
+                color: white;
+                transform: scale(1.02);
+            }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #a5d6a7;
+            color: #a5d6a7;
+            border-radius: 30px;
+            padding: 10px 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .step {
+            display: none;
+        }
+
+            .step.active {
+                display: block;
+            }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #a5d6a7;
+            margin: 15px 0 10px;
+            border-right: 3px solid var(--leaf-green);
+            padding-right: 10px;
+        }
+
+        .check-item {
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        input[type="radio"], input[type="checkbox"] {
+            accent-color: var(--leaf-green);
+        }
+
+        .footer-logo {
+            margin-top: auto;
+            padding-top: 20px;
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-card">
+        <div class="left-side"></div>
+
+        <div class="right-side">
+            <a href="@Url.Action("Home", "Users")" class="back-home-arrow" title="العودة للرئيسية" style="font-size: 1.5rem; color: #28a745; text-decoration: none;">
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <div class="header-section">
+                <div class="user-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <h2>إنشاء حساب متطوع</h2>
+            </div>
+            <form asp-action="Registration" method="post" id="regForm">
+
+                <div class="step active" id="step1">
+                    <div class="form-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" name="name" placeholder="الاسم الكامل" required>
+                    </div>
+                    <div class="form-group">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="text" name="phone" placeholder="رقم الجوال" required>
+                    </div>
+                    <div class="form-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+
+                        @if (ViewData["EmailError"] != null)
+                        {
+                            <small style="color:#ffb3b3; display:block; margin-top:5px;">
+                                @ViewData["EmailError"]
+                            </small>
+                        }
+                    </div>
+                    <div class="form-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" name="password" placeholder="الرقم السري" required>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label class="fw-bold small d-block mb-2 color-primary" style="color: var(--primary-green);">الجنس:</label>
+                        <div class="d-flex gap-3">
+                            <label><input type="radio" name="gender" value="ذكر"> ذكر</label>
+                            <label><input type="radio" name="gender" value="أنثى"> أنثى</label>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-custom w-100 mt-3" onclick="validateStep1()">التالي</button>
+                </div>
+
+                <div class="step" id="step2">
+                    <div class="section-title">الأيام المناسبة للتطوع</div>
+                    <div class="row g-2">
+                        @foreach (var day in new[] { "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت" })
+                        {
+                            <div class="col-4 check-item">
+                                <label><input type="checkbox" name="availableDays" value="@day"> @day</label>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="section-title">فترة التطوع (مطلوبة)</div>
+                    <div class="d-flex gap-3 mb-3">
+                        <label><input type="radio" name="shift" value="صباحي"> صباحي</label>
+                        <label><input type="radio" name="shift" value="مسائي"> مسائي</label>
+                    </div>
+
+                    <div class="form-group">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" name="location" placeholder="الموقع (اختياري)">
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="button" class="btn-outline w-50" onclick="nextStep(1)">السابق</button>
+                        <button type="button" class="btn-custom w-50" onclick="validateStep2()">التالي</button>
+                    </div>
+                </div>
+
+                <div class="step" id="step3">
+                    <div class="section-title">المجالات حسب مهاراتك</div>
+                    <div class="row g-1 mb-3">
+                        @foreach (var s in new[] { "التشجير والزراعة", "تنظيف الاماكن العامة", "فرز النفايات", "التخطيط والتنظيم", "التصميم الجرافيكي", "كتابة المحتوى", "تنظيم الفعاليات", "القيادة", "وسائل التواصل" })
+                        {
+                            <div class="col-6 check-item">
+                                <label><input type="checkbox" name="skills" value="@s"> @s</label>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="section-title">المجالات حسب اهتماماتك</div>
+                    <div class="row g-1">
+                        @foreach (var i in new[] { "التشجير والحيوانات", "نظافة المساجد", "إعادة التدوير", "الزراعة المستدامة", "التوعية البيئية", "الطاقة المتجددة" })
+                        {
+                            <div class="col-6 check-item">
+                                <label><input type="checkbox" name="interests" value="@i"> @i</label>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="button" class="btn-outline w-50" onclick="nextStep(2)">السابق</button>
+                        <button type="submit" class="btn-custom w-50">إنشاء حساب</button>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="footer-logo">
+                منصة عطاء التطوعية &copy; 2026
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function nextStep(n) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + n).classList.add('active');
+        }
+
+        function validateStep1() {
+            const fields = ['name', 'phone', 'email', 'password'];
+            for (let f of fields) {
+                if (!document.querySelector(`input[name="${f}"]`).value.trim()) {
+                    alert("رجاءً عبّي جميع الحقول المطلوبة");
+                    return;
+                }
+            }
+            if (!document.querySelector('input[name="gender"]:checked')) {
+                alert("رجاءً اختاري الجنس");
+                return;
+            }
+            nextStep(2);
+        }
+
+        function validateStep2() {
+            if (!document.querySelector('input[name="shift"]:checked')) {
+                alert("رجاءً اختاري فترة التطوع");
+                return;
+            }
+            nextStep(3);
+        }
+    </script>
+</body>
+</html>

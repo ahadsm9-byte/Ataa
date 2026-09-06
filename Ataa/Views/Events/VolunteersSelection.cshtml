@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Ataa.Models.Volunteers>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <span class="fw-bold">قائمة المتطوعين (@Model.Count())</span>
+    <button type="button" class="btn btn-sm btn-link text-success p-0 fw-bold text-decoration-none" onclick="selectAll()">تحديد الكل</button>
+</div>
+
+<div style="max-height: 300px; overflow-y: auto;">
+    @foreach (var v in Model)
+    {
+        <label class="vol-card shadow-sm border-0" style="cursor: pointer;">
+            <input type="checkbox" name="selectedVolunteers" value="@v.VolunteerID" class="vol-check-box" style="width: 18px; height: 18px; accent-color: #2D4F28;">
+            <div class="ms-2">
+                <div class="fw-bold small">@v.Name</div>
+                <small class="text-muted">@v.Phone</small>
+            </div>
+        </label>
+    }
+</div>
+
+<script>
+    function selectAll() {
+        document.querySelectorAll('.vol-check-box').forEach(cb => cb.checked = true);
+    }
+</script>

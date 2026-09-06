@@ -1,0 +1,108 @@
+﻿@model dynamic
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+
+}
+
+<style>
+    .sidebar, #sidebar-wrapper, .main-sidebar {
+        display: none !important;
+    }
+
+    .main-wrapper, .content-wrapper, main {
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .docs-bg {
+        background: linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)), url('/images/madinah_watermark.jpg');
+        background-size: cover;
+        background-attachment: fixed;
+        min-height: 100vh;
+        padding: 60px 15px;
+        direction: rtl;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    .docs-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+        .docs-header h1 {
+            color: #b89146;
+            font-weight: 900;
+            font-size: 2.5rem;
+        }
+
+    .doc-card {
+        background: white;
+        border-radius: 20px;
+        border-top: 6px solid #2d4d22;
+        padding: 40px 30px;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        transition: 0.3s ease-in-out;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+        .doc-card:hover {
+            transform: translateY(-10px);
+            border-top-color: #b89146;
+        }
+
+    .doc-icon-box {
+        font-size: 4rem;
+        color: #b89146;
+        margin-bottom: 25px;
+    }
+
+    .doc-name {
+        color: #2d4d22;
+        font-weight: 900;
+        font-size: 1.4rem;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .btn-action {
+        background: #2d4d22;
+        color: white;
+        border: none;
+        padding: 12px 40px;
+        border-radius: 50px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: 0.3s;
+        display: inline-block;
+        font-size: 1.1rem;
+    }
+
+        .btn-action:hover {
+            background: #b89146;
+            color: white;
+        }
+
+</style>
+
+<div class="docs-bg">
+    <div class="container">
+
+        <div class="docs-header">
+            <h1>الوثائق والأنظمة</h1>
+        </div>
+
+        <div class="doc-card">
+            <div class="doc-icon-box">
+                <i class="fas fa-file-pdf"></i>
+            </div>
+            <h4 class="doc-name">اللائحة الأساسية لجمعية البيئة بالمدينة المنورة</h4>
+
+            <a href="https://www.madinah-eco.org.sa/uploads/website_pages/1_681a2577dc1fc.pdf" target="_blank" class="btn-action">
+                <i class="fas fa-eye me-2"></i> عرض الملف الآن
+            </a>
+        </div>
+
+      

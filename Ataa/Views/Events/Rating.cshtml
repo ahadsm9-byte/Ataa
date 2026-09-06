@@ -1,0 +1,106 @@
+﻿@model IEnumerable<Ataa.Models.Events>
+@{
+   
+
+    var allRegistrations = ViewBag.AllRegs as List<Ataa.Models.EventRegistrations>;
+}
+
+<style>
+    .events-wrapper {
+        padding: 30px;
+        direction: rtl;
+    }
+
+    .event-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-top: 4px solid #4a6d3c;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .event-card:hover {
+            transform: scale(1.02);
+        }
+
+    .star-gold {
+        color: #ffc107;
+    }
+
+    .star-muted {
+        color: #e0e0e0;
+    }
+  
+    }
+</style>
+
+<div class="events-wrapper">
+    <h3 class="mb-4">تقييمات المتطوعين حسب الفعالية</h3>
+
+    <div class="row">
+        @foreach (var ev in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <a asp-action="ViewEventRatings" asp-route-id="@ev.Id" style="text-decoration: none; color: inherit;">
+                    <div class="event-card shadow-sm border-0 rounded-4 p-4 text-center bg-white h-100" style="cursor: pointer; transition: 0.3s;">
+                        <h4 class="fw-bold mb-2" style="color: #2D4F28;">@ev.Name</h4>
+                        <p class="text-muted small mb-3">@ev.Date.ToShortDateString()</p>
+                        <div class="text-success small fw-bold">
+                            اضغط لعرض التقييمات <i class="fas fa-chevron-down ms-1"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        
+
+            <div class="modal fade" id="modal-@ev.Id" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content text-end" style="direction: rtl; border-radius: 15px;">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title fw-bold">المشاركين في: @ev.Name</h5>
+                            <button type="button" class="btn-close ms-0 me-auto" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            @{
+                                var filteredRegs = allRegistrations?.Where(r => r.EventId == ev.Id).ToList();
+                            }
+
+                            @if (filteredRegs != null && filteredRegs.Any())
+                            {
+                                @foreach (var reg in filteredRegs)
+                                {
+                                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                        <span class="fw-bold">@reg.Volunteer?.Name</span>
+                                        <div>
+                                            @if (reg.Rating.HasValue && reg.Rating.Value > 0)
+                                            {
+                                                <span class="badge bg-light text-dark">التقييم: @reg.Rating.Value</span>
+
+                                                for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <i class="fas fa-star @(i <= reg.Rating.Value ? "star-gold" : "star-muted")"></i>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <small class="text-muted">لم يُقيم بعد (@reg.Rating)</small>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-center text-muted p-3">لا يوجد مسجلين حالياً.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+ 
+
+    </div>
+</div>

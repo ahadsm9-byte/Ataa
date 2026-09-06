@@ -1,0 +1,340 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@model Ataa.Models.Events
+
+@{
+    ViewData["Title"] = "إضافة فعالية جديدة";
+    Layout = null;
+
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("Role") ?? "";
+    bool isAdmin = userRole.Equals("Admin", StringComparison.OrdinalIgnoreCase);
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - جمعية البيئة</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --text-green: #3d5a37;
+            --main-green: #2d4d22;
+            --sidebar-gradient: linear-gradient(to bottom, #ffffff, #d7e6d2);
+            --bg-light: #f8faf9;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: var(--sidebar-gradient);
+            position: fixed;
+            right: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 10px;
+            border-left: 1px solid #e0e0e0;
+            z-index: 1000;
+        }
+
+        .sidebar-header-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5px;
+            margin-bottom: 20px;
+            direction: ltr; 
+        }
+
+        .logo-wrapper img {
+            width: 110px;
+            height: auto;
+        }
+
+        .profile-wrapper {
+            width: 55px;
+            height: 55px;
+            background-color: #e8f3e5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid #c5d9c0;
+        }
+
+            .profile-wrapper img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .nav-link-sidebar {
+            color: var(--text-green);
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            transition: 0.3s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: right;
+            font-size: 1rem;
+        }
+
+            .nav-link-sidebar:hover, .active-nav {
+                background-color: rgba(255, 255, 255, 0.7);
+                font-weight: bold;
+            }
+
+        .dropdown-container {
+            display: none;
+            margin-right: 20px;
+        }
+
+        .main-content {
+            margin-right: 260px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .create-card {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.05);
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .form-title {
+            color: var(--main-green);
+            font-weight: bold;
+            border-right: 5px solid #5c8b4f;
+            padding-right: 15px;
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            color: var(--text-green);
+            font-weight: 600;
+        }
+
+        .form-control, .form-select {
+            border: 1.5px solid #eee;
+            border-radius: 12px;
+            padding: 12px;
+            background-color: #fcfdfc;
+        }
+
+        .options-container {
+            background: #f9fbf9;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #f0f2f0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .upload-zone {
+            border: 2px dashed #b1c5ac;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            background: #fcfdfc;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .upload-zone:hover {
+                background: #f0f4f0;
+            }
+
+        .btn-action {
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn-save-publish {
+            background-color: var(--main-green);
+            color: white;
+        }
+
+        .btn-save-draft {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header-flex">
+            <div class="logo-wrapper">
+                <img src="/images/gpem1.jpg" alt="Logo">
+            </div>
+            <div class="profile-wrapper">
+                <img src="/images/gpic1.png" alt="Profile">
+            </div>
+        </div>
+
+        <div class="text-center mb-4 fw-bold" style="font-size: 0.85rem; color: var(--text-green);">
+            جمعية البيئة بالمدينة المنورة
+        </div>
+
+        <nav>
+            <a href="/Users/admin_home" class="nav-link-sidebar">
+                <i class="bi bi-house-door ms-2"></i> الصفحة الرئيسية
+            </a>
+
+            @if (isAdmin)
+            {
+                <button class="nav-link-sidebar" onclick="toggleDropdown()">
+                    <i class="bi bi-people ms-2"></i> المستخدمين
+                    <i class="bi bi-chevron-down me-auto"></i>
+                </button>
+                <div id="usersDropdown" class="dropdown-container">
+                    <a href="/Users/Employees" class="nav-link-sidebar py-1 fs-6">- الموظفين</a>
+                    <a href="/Users/Donors" class="nav-link-sidebar py-1 fs-6">- المتبرعين</a>
+                    <a href="/Users/Volunteers" class="nav-link-sidebar py-1 fs-6">- المتطوعين</a>
+                </div>
+            }
+
+            <a href="/Projects/Index" class="nav-link-sidebar"><i class="bi bi-folder ms-2"></i> المشاريع</a>
+            <a href="/Events/emIndex" class="nav-link-sidebar active-nav"><i class="bi bi-calendar-event ms-2"></i> إدارة الفعاليات</a>
+        </nav>
+
+        <a href="/Users/Logout" class="mt-auto nav-link-sidebar text-danger">
+            <i class="bi bi-box-arrow-right ms-2"></i> تسجيل الخروج
+        </a>
+    </div>
+
+    <div class="main-content">
+        <div class="create-card">
+            <h3 class="form-title"><i class="bi bi-plus-circle ms-2"></i> إضافة فعالية تطوعية جديدة</h3>
+
+            <form asp-action="Create" method="post" enctype="multipart/form-data" id="eventForm">
+                <input type="hidden" name="Status" id="eventStatus" value="Draft" />
+
+                <div class="row g-4 text-end">
+                    <div class="col-md-6">
+                        <label asp-for="Name" class="form-label">عنوان الفعالية</label>
+                        <input asp-for="Name" class="form-control" placeholder="مثلاً: حملة تنظيف شاطئ..." required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Category" class="form-label">التصنيف</label>
+                        <select asp-for="Category" class="form-select" required>
+                            <option value="بيئي">بيئي</option>
+                            <option value="تعليمي">تعليمي</option>
+                            <option value="صحي">صحي</option>
+                            <option value="اجتماعي">اجتماعي</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Description" class="form-label">وصف الفعالية</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="اكتب تفاصيل الفعالية هنا..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>التاريخ والوقت</label>
+                        <input asp-for="Date" class="form-control" type="datetime-local" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="Location" class="form-label">الموقع (المدينة/الحي)</label>
+                        <input asp-for="Location" class="form-control" placeholder="مثلاً: المدينة المنورة" required />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="Capacity" class="form-label">العدد المطلوب</label>
+                        <input asp-for="Capacity" type="number" class="form-control" placeholder="0" required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Hours" class="form-label">ساعات التطوع المكتسبة</label>
+                        <input asp-for="Hours" type="number" step="0.5" class="form-control" placeholder="مثلاً: 4" required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="OrganizingEntity" class="form-label">الجهة المنظمة</label>
+                        <input asp-for="OrganizingEntity" class="form-control" placeholder="اسم الجمعية أو الإدارة" required />
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">صورة الغلاف</label>
+                        <div class="upload-zone" onclick="document.getElementById('imageInput').click()">
+                            <i class="bi bi-image fs-1 text-muted"></i>
+                            <p class="mt-2 mb-0">اسحب الصورة هنا أو اضغط للاختيار</p>
+                            <input type="file" name="ImageFile" id="imageInput" class="d-none" onchange="updateFileName(this)" />
+                            <small id="fileNameDisplay" class="text-success fw-bold"></small>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">المهارات المطلوبة</label>
+                        <div class="options-container">
+                            @foreach (var skill in new[] { "التشجير", "التنظيم", "فرز النفايات", "التصميم", "القيادة" })
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="skills" value="@skill" id="sk_@skill">
+                                    <label class="form-check-label ms-2" for="sk_@skill">@skill</label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3 mt-5 border-top pt-4">
+                    <button type="button" class="btn-action btn-save-publish" onclick="submitForm('Active')">
+                        <i class="bi bi-send-check ms-1"></i> حفظ ونشر الفعالية
+                    </button>
+                    <button type="button" class="btn-action btn-save-draft" onclick="submitForm('Draft')">
+                        <i class="bi bi-file-earmark-lock ms-1"></i> حفظ كمسودة
+                    </button>
+                    <a asp-action="emIndex" class="btn btn-outline-secondary rounded-pill px-4">إلغاء</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleDropdown() {
+            var dropdown = document.getElementById("usersDropdown");
+            dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+        }
+
+        function updateFileName(input) {
+            const fileName = input.files[0]?.name;
+            if (fileName) {
+                document.getElementById('fileNameDisplay').textContent = "تم اختيار: " + fileName;
+            }
+        }
+
+        function submitForm(status) {
+            document.getElementById("eventStatus").value = status;
+            document.getElementById("eventForm").submit();
+        }
+    </script>
+</body>
+</html>

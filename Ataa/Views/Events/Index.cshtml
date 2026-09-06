@@ -1,0 +1,324 @@
+﻿@model Ataa.Models.VolunteerEventsViewModel
+
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+}
+
+<section class="animated-hero">
+
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+    <div class="shape shape3"></div>
+
+    <div class="container text-center content">
+
+        <h1 class="hero-title">فرص التطوع</h1>
+        <p class="hero-subtitle">
+            شارك في صناعة مستقبل مستدام وكن جزءًا من التغيير
+        </p>
+
+        
+
+    </div>
+</section>
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        
+        <h1 class="subtitle">ساهم معنا في بناء بيئة مستدامة ومستقبل أفضل</h1>
+        <div class="title-underline mx-auto"></div>
+    </div>
+
+  
+    <div class="search-section d-flex justify-content-center mb-5">
+        <form asp-action="Index" method="get" class="search-form">
+
+            <div class="search-box">
+
+                <i class="fas fa-search search-icon"></i>
+
+                <input id="searchInput"
+                       type="text"
+                       name="searchString"
+                       class="search-input"
+                       placeholder="ابحث عن فرصة تطوعية بالاسم ..."
+                       value="@ViewData["CurrentFilter"]" />
+
+                <button type="submit" class="search-btn">
+                    بحث
+                </button>
+
+            </div>
+
+        </form>
+    </div>
+
+    <div dir="rtl">
+        @if (Model.PreferredEvents.Any())
+        {
+            <h4 class="section-title mb-4 text-center">فعاليات تناسب اهتماماتك</h4> <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5"> @foreach (var item in Model.PreferredEvents)
+                {
+                    <div class="col"> <div class="event-card-small shadow-sm h-100"> 
+                        <div class="image-wrapper"> <img src="@(string.IsNullOrEmpty(item.Image) ? "/images/default.jpg" : item.Image)" onerror="this.src='/images/default.jpg'"> 
+                            <span class="category-badge">@item.Category</span> </div>
+                            <div class="event-body">
+                                <h6 class="event-name">@item.Name</h6>
+                                <p class="event-location">@item.Location</p>
+                                <a asp-action="Details" asp-route-id="@item.Id"
+                                   class="details-btn">❮</a>
+                            </div>
+                        </div>
+                    </div>
+                } </div>
+        }
+
+        <h4 class="section-title text-center mb-4">جميع فرص التطوع</h4>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+
+            @foreach (var item in Model.OtherEvents)
+            {
+                <div class="col">
+                    <div class="event-card">
+
+                        <div class="image-wrapper">
+                            <img src="@(string.IsNullOrEmpty(item.Image) ? "/images/default.jpg" : item.Image)"
+                                 onerror="this.src='/images/default.jpg'">
+                            <span class="category-badge">@item.Category</span>
+                        </div>
+
+                        <div class="event-body">
+                            <h6 class="event-name">@item.Name</h6>
+                            <p class="event-location">@item.Location</p>
+                            <a asp-action="Details" asp-route-id="@item.Id"
+                               class="details-btn">❮</a>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</div>
+
+<style>
+
+body {
+    background: #f4f7f4;
+}
+
+.animated-hero {
+    position: relative;
+    padding: 140px 20px;
+    background: linear-gradient(135deg,#1f4d2b,#2d7a45);
+    overflow: hidden;
+    color:white;
+}
+
+.animated-hero .content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 900;
+}
+
+.hero-subtitle {
+    margin-top: 15px;
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.hero-btn {
+    display: inline-block;
+    margin-top: 25px;
+    background: white;
+    color: #1f4d2b;
+    padding: 12px 35px;
+    border-radius: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.hero-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    animation: float 8s infinite ease-in-out;
+}
+
+.shape1 {
+    width: 250px;
+    height: 250px;
+    top: -80px;
+    left: -80px;
+}
+
+.shape2 {
+    width: 180px;
+    height: 180px;
+    bottom: -60px;
+    right: -60px;
+    animation-delay: 2s;
+}
+
+.shape3 {
+    width: 120px;
+    height: 120px;
+    top: 40%;
+    right: 20%;
+    animation-delay: 4s;
+}
+
+@@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.main-title {
+    font-weight: 900;
+    color: #1f4d2b;
+}
+
+.title-underline {
+    width: 90px;
+    height: 4px;
+    background: #2d7a45;
+    border-radius: 50px;
+}
+
+.subtitle {
+    color: #6c757d;
+}
+
+
+    .search-section {
+        margin-top: 40px;
+    }
+
+    .search-form {
+        width: 100%;
+        max-width: 700px;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        border-radius: 60px;
+        padding: 8px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        transition: 0.3s ease;
+    }
+
+        .search-box:focus-within {
+            box-shadow: 0 20px 50px rgba(31,77,43,0.2);
+            transform: translateY(-3px);
+        }
+
+    .search-icon {
+        color: #1f4d2b;
+        margin: 0 12px;
+    }
+
+    .search-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 12px;
+        font-size: 0.95rem;
+        background: transparent;
+    }
+
+    .search-btn {
+        background: linear-gradient(135deg,#1f4d2b,#2d7a45);
+        color: white;
+        border: none;
+        padding: 10px 28px;
+        border-radius: 50px;
+        font-weight: 700;
+        transition: 0.3s ease;
+    }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+.event-card {
+    background: white;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    transition: 0.3s;
+}
+
+.event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+}
+
+.image-wrapper {
+    height: 200px;
+    position: relative;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.category-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: #1f4d2b;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+}
+
+.event-body {
+    padding: 16px;
+    position: relative;
+}
+
+.event-name {
+    font-weight: 800;
+    color: #1f4d2b;
+}
+
+.details-btn {
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f1f3f1;
+    text-decoration: none;
+    color: #1f4d2b;
+}
+
+.details-btn:hover {
+    background: #1f4d2b;
+    color: white;
+}
+
+</style>

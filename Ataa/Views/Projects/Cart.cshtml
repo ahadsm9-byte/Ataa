@@ -1,0 +1,173 @@
+﻿@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+    ViewData["Title"] = "سلة تبرعاتك";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - عطاء</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        :root {
+            --primary-green: #2D4F28;
+            --light-green: #5c8b4f;
+            --header-beige: #F9F7F2;
+        }
+
+        body {
+            background: #f4f7f4;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+        }
+
+        .cart-item-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .cart-item-card:hover {
+            transform: scale(1.01);
+            border-color: var(--light-green);
+        }
+
+        .item-img {
+            width: 120px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .total-box {
+            border: 1px solid #eee;
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            background: #fff;
+            position: sticky;
+            top: 20px;
+        }
+
+        .btn-back {
+            background-color: transparent;
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+            border-radius: 50px;
+            width: 100%;
+            padding: 10px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: var(--primary-green);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5 mb-5">
+        <h3 class="fw-bold mb-5 text-end" style="color: var(--primary-green);">
+            <i class="fa-solid fa-basket-shopping ms-2"></i> سلة تبرعاتك
+        </h3>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="total-box shadow-sm">
+                    <h4 class="text-muted mb-3">إجمالي التبرعات</h4>
+                    <h2 id="grandTotal" class="fw-bold mb-4" style="color: var(--primary-green);">0 ريال</h2>
+
+                    <a href="/Projects/Payment" class="btn btn-success w-100 rounded-pill py-2 fw-bold mb-2">
+                        المتابعة للدفع <i class="fa-solid fa-credit-card ms-2"></i>
+                    </a>
+
+                    <a id="backToProject" href="/Projects/donor_home" class="btn-back mt-2">
+                        إضافة تبرع آخر <i class="fa-solid fa-plus ms-2"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-8" id="cartItemsList">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function () {
+            renderCart();
+
+            function renderCart() {
+                let cartData = JSON.parse(localStorage.getItem('cartItems')) || [];
+                let listContainer = $('#cartItemsList');
+                listContainer.empty();
+                let total = 0;
+
+                if (cartData.length > 0) {
+                    cartData.forEach((item, index) => {
+                        total +=parseFloat(item.amount);
+
+                        let imageSrc = item.image;
+                        if (imageSrc && !imageSrc.startsWith('http') && !imageSrc.startsWith('/')) {
+                            imageSrc = '/' + imageSrc;
+                        }
+                        if (!imageSrc) { imageSrc = '/images/project-placeholder.jpg'; }
+
+                        listContainer.append(`
+                <div class="cart-item-card shadow-sm">
+                    <button class="btn text-danger fs-5 border-0" onclick="removeItem(${index})">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                    <div class="d-flex align-items-center gap-4 flex-grow-1 justify-content-end">
+                        <div class="text-end">
+                            <h5 class="fw-bold mb-1" style="color:var(--primary-green)">${item.name}</h5>
+                            <span class="badge bg-success px-3 py-2" style="font-size:0.9rem">
+                                ${item.amount} ريال
+                            </span>
+                            <div class="small text-muted mt-1">رقم المشروع: ${item.id}</div>
+                        </div>
+                        <img src="${imageSrc}" class="item-img" onerror="this.src='/images/project-placeholder.jpg'">
+                    </div>
+                </div>
+            `);
+                    });
+                    $('#grandTotal').text(total.toLocaleString() + ' ريال');
+                } else {
+                    listContainer.html(`
+                        <div class="text-center p-5 bg-light rounded-4">
+                            <i class="fa-solid fa-cart-plus fs-1 text-muted mb-3"></i>
+                            <h4 class="text-muted">سلة التبرعات فارغة حالياً</h4>
+                            <a href="/Projects/donor_home" class="btn btn-success mt-3">تصفح المشاريع</a>
+                        </div>
+                    `);
+                    $('#grandTotal').text('0 ريال');
+                }
+            }
+
+            window.removeItem = function (index) {
+                let cartData = JSON.parse(localStorage.getItem('cartItems')) || [];
+                cartData.splice(index, 1);
+                localStorage.setItem('cartItems', JSON.stringify(cartData));
+                renderCart();
+            };
+        });
+    </script>
+</body>
+</html>

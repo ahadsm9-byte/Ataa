@@ -1,0 +1,246 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تسجيل الدخول - عطاء</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: url('/Images/re.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            body::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: rgba(0,0,0,0.55);
+            }
+
+        .back-home-arrow {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-size: 2rem; 
+            color: #4caf50; 
+            text-decoration: none;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .back-home-arrow:hover {
+                color: #81c784;
+                transform: translateX(-5px) scale(1.1); 
+            }
+
+        .container {
+            position: relative;
+            width: 90%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            z-index: 10;
+        }
+
+        .hero-text {
+            width: 50%;
+        }
+
+            .hero-text h1 {
+                font-size: 32px;
+                font-weight: 700;
+                line-height: 1.4;
+            }
+
+            .hero-text p {
+                margin-top: 15px;
+                font-size: 16px;
+                opacity: 0.9;
+            }
+
+        .login-card {
+            width: 380px;
+            padding: 40px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: fadeIn 1s ease;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .input-box {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+            .input-box i {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #c8e6c9;
+            }
+
+            .input-box input {
+                width: 100%;
+                padding: 12px 40px 12px 12px;
+                border: none;
+                border-radius: 10px;
+                background: rgba(255,255,255,0.2);
+                color: white;
+            }
+
+                .input-box input::placeholder {
+                    color: #e0f2e9;
+                }
+
+                .input-box input:focus {
+                    outline: none;
+                    background: rgba(255,255,255,0.3);
+                }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #4caf50;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .btn:hover {
+                background: #66bb6a;
+                transform: translateY(-2px);
+            }
+
+        .register {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+            .register a {
+                color: #a5d6a7;
+                text-decoration: none;
+            }
+
+                .register a:hover {
+                    text-decoration: underline;
+                }
+
+        @@media(max - width:900px) {
+            .container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-text {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+
+            .back-home-arrow {
+                top: 20px;
+                right: 20px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="@Url.Action("Home", "Users")" class="back-home-arrow" title="العودة للرئيسية">
+        <i class="fa-solid fa-arrow-right"></i>
+    </a>
+
+    <div class="container">
+
+        <div class="hero-text">
+            <h1>مَرْحَبًا بِكُمْ <br> رُؤْيَتُنَا بِيئَةٌ طَيِّبَةٌ مُسْتَدَامَةٌ بِهُوِيَّةٍ إِسْلَامِيَّةٍ </h1>
+            <p>منصة عطاء – نسهل عليك التطوع والمشاركة في صنع أثر إيجابي.</p>
+        </div>
+
+        <div class="login-card">
+
+            <h2>تسجيل الدخول</h2>
+
+            @if (ViewData["Message"] != null)
+            {
+                <div style="margin-bottom:15px; color:#ffcccb; text-align:center;">
+                    @ViewData["Message"]
+                </div>
+            }
+
+            <form asp-action="Login" method="post">
+
+                <div class="input-box">
+                    <i class="fa fa-envelope"></i>
+                    <input type="email" name="na" placeholder="البريد الإلكتروني" required />
+                </div>
+
+                <div class="input-box">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" name="pa" placeholder="كلمة المرور" required />
+                </div>
+
+                <button type="submit" class="btn">دخول</button>
+
+            </form>
+
+            <div class="register">
+                ليس لديك حساب متطوع؟
+                <a asp-action="Registration">إنشاء حساب</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

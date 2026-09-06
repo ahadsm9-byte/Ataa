@@ -1,0 +1,172 @@
+﻿@model Ataa.Models.Events
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+}
+<style>
+    body {
+        background: #f4f7f4;
+    }
+
+    
+   
+        .main-card {
+            background-color: #ffffff;
+            border-radius: 40px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .header-item {
+            color: #2D4F28;
+            font-weight: bold;
+            flex: 1;
+            text-align: center;
+        }
+
+        .data-row {
+            background-color: #f9f9f6;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 10px;
+        }
+
+        .data-item {
+            color: #7a7a7a;
+            flex: 1;
+            text-align: center;
+        }
+
+        .star-active {
+            color: #FFC107;
+            margin: 0 2px;
+        }
+
+        .star-grey {
+            color: #e6e6e6;
+            margin: 0 2px;
+        }
+   
+
+    .story-container { max-width: 1100px; margin: 50px auto; direction: rtl; }
+
+    .main-box {
+        background: white;
+        border: 1.5px solid #c5d9c0;
+        border-radius: 30px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+
+    .green-title { color: #2d4d22; font-weight: bold; margin-bottom: 15px; }
+
+    .text-content { line-height: 1.8; color: #444; text-align: justify; }
+
+    .image-frame {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 15px;
+    }
+</style>
+
+<div class="story-container">
+    <div class="row g-4 mb-4">
+        <div class="col-md-5">
+            <div class="image-frame">
+                <img src="@Model.Image" class="w-100 h-100" style="object-fit: cover;">
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="main-box">
+                <h4 class="green-title">@Model.Name :</h4>
+                <p class="text-content">@Model.Description</p>
+            </div>
+
+            <div class="main-box">
+                <h5 class="green-title">أهداف المبادرة:</h5>
+                <div class="text-content">
+                    @Html.Raw(Model.GoalsReport?.Replace("\n", "<br>"))
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-7">
+            <div class="main-box">
+                <h5 class="green-title">آلية التنفيذ:</h5>
+                <div class="text-content">
+                    @Html.Raw(Model.ExecutionMechanism?.Replace("\n", "<br>"))
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="gallery-grid">
+                @if (!string.IsNullOrEmpty(Model.ExtraImages))
+                {
+                    var imgs = Model.ExtraImages.Split(',');
+                    foreach (var img in imgs.Take(3))
+                    {
+                        <img src="@img" class="img-fluid rounded-4 shadow-sm" style="height: 120px; width: 100%; object-fit: cover;">
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <h2 style="color:darkslategrey">التقييمات</h2>
+    <div class="main-card shadow-sm mb-4">
+        <div class="header-row">
+            <div class="header-item">اسم المتطوع</div>
+            
+            <div class="header-item">التقييم</div>
+        </div>
+
+        @if (Model.EventRegistrations != null && Model.EventRegistrations.Any())
+        {
+            foreach (var reg in Model.EventRegistrations)
+            {
+                <div
+                    class="data-row">
+                    <div class="data-item">@reg.Volunteer?.Name</div>
+                   
+                    <div class="data-item">
+                        @if (reg.Rating.HasValue && reg.Rating > 0)
+                        {
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="fas fa-star @(i <= reg.Rating ? "star-active" : "star-grey")"></i>
+                            }
+                        }
+                        else
+                        {
+                            <span style="color: #d1d1d1; font-style: italic; font-size: 0.9rem;">لم يقيم بعد</span>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-center text-muted p-4">لا توجد تقييمات مسجلة لهذه الفعالية حتى الآن.</p>
+        }
+    </div>
+
+    <div class="text-center mt-4">
+        <a asp-action="allEvent" class="btn btn-outline-success rounded-pill px-4">العودة للأرشيف</a>
+    </div>

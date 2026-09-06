@@ -1,0 +1,165 @@
+﻿@model dynamic
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+
+}
+
+<style>
+    .sidebar, #sidebar-wrapper, .main-sidebar, .sidebar-container, .nav-sidebar {
+        display: none !important;
+    }
+
+    .main-wrapper, .content-wrapper, #page-content-wrapper, main {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .assembly-container {
+        background-color: #f8faf7;
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 60px;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .page-watermark {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 85%;
+        opacity: 0.05;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .custom-table-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        overflow: hidden;
+        border: 1px solid #eef2ed;
+        position: relative;
+        z-index: 5;
+        margin-bottom: 40px;
+    }
+
+    .table thead {
+        background: #2d4d22;
+        color: white;
+    }
+
+        .table thead th {
+            padding: 20px;
+            border: none;
+            font-weight: 700;
+            text-align: right;
+        }
+
+    .table tbody tr {
+        transition: 0.3s;
+    }
+
+        .table tbody tr:hover {
+            background-color: #f1f5f0;
+        }
+
+    .table td {
+        padding: 15px 20px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f0f0f0;
+        color: #444;
+        text-align: right;
+    }
+
+    .attachment-box {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 350px;
+        margin-bottom: 30px;
+        transition: 0.3s;
+        text-decoration: none !important;
+        position: relative;
+        z-index: 10;
+    }
+
+        .attachment-box:hover {
+            border-color: #d4af37;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+    .pdf-icon {
+        background: #fdf2f2;
+        color: #dc3545;
+        width: 45px;
+        height: 45px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+</style>
+
+<div class="assembly-container rtl" dir="rtl">
+    <div class="page-watermark">
+        <img src="/images/Logo.jpeg" alt="Watermark">
+    </div>
+
+    <div class="container py-5">
+        <div class="text-center mb-5" style="position: relative; z-index: 10;">
+            <h1 style="color: #2d4d22; font-weight: 900;">أعضاء الجمعية العمومية</h1>
+            <div style="width: 80px; height: 4px; background: #d4af37; margin: 15px auto;"></div>
+        </div>
+
+
+
+
+        <div class="custom-table-card">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;"></th>
+                            <th>اسم العضو</th>
+                            <th>الجنسية</th>
+                            <th>البريد الإلكتروني</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="fw-bold">د. طه محمد هاشم الغزي</td><td>سعودي</td><td>t_alghazi@@yahoo.com</td></tr>
+                        <tr><td>2</td><td class="fw-bold">م. محمد توفيق الايوبي</td><td>سعودي</td><td>mohammed@@mnco.com.sa</td></tr>
+                        <tr><td>3</td><td class="fw-bold">د. بسام عبد الستار الميمني</td><td>سعودي</td><td>goodcity@@gmail.com</td></tr>
+                        <tr><td>4</td><td class="fw-bold">د. زينب زكي الفل</td><td>سعودي</td><td>alfull-zz@@hotmail.com</td></tr>
+                        <tr><td>5</td><td class="fw-bold">د. عبد الله تركي التركي</td><td>سعودي</td><td>abofaris1656@@hotmail.com</td></tr>
+                        <tr><td>6</td><td class="fw-bold">د. ندا عبد الله الياس</td><td>سعودي</td><td>elyas.nada@@outlook.com</td></tr>
+                        <tr><td>7</td><td class="fw-bold">أ. بدر مبروك الصيعري</td><td>سعودي</td><td>end_2000@@hotmail.com</td></tr>
+                        <tr><td>8</td><td class="fw-bold">د. خالد بكر كمال</td><td>سعودي</td><td>kbkamal@@hotmail.com</td></tr>
+                        <tr><td>9</td><td class="fw-bold">أ. خالد بن معيض بن عليثه الصاعدي</td><td>سعودي</td><td>400kka@@hotmail.com</td></tr>
+                        <tr><td>10</td><td class="fw-bold">احمد بن عبيد بن احمد حماد</td><td>سعودي</td><td>ahmad@@saudicancer.ma.com</td></tr>
+                        <tr><td>11</td><td class="fw-bold">آلاء عبدالبديع حمزه زللي</td><td>سعودي</td><td>bdoaa137@@gmail.com</td></tr>
+                        <tr><td>12</td><td class="fw-bold">احمد ابراهيم يوسف البوق</td><td>سعودي</td><td>2010boug@@gmail.com</td></tr>
+                        <tr><td>13</td><td class="fw-bold">حامد حمدان حامد الخطيب</td><td>سعودي</td><td>hamidalkhateeb@@hotmail.com</td></tr>
+                        <tr><td>14</td><td class="fw-bold">جمال محمد هاشم رشيد الغزي</td><td>سعودي</td><td>hashem.jamal@@gmail.com</td></tr>
+                        <tr><td>15</td><td class="fw-bold">محمد بركي مبارك الحازمي</td><td>سعودي</td><td>brky2030@@gmail.com</td></tr>
+                        <tr><td>16</td><td class="fw-bold">عيد بن دعسان بن جمعان العنزي</td><td>سعودي</td><td>eid@@uymail.com</td></tr>
+                        <tr><td>17</td><td class="fw-bold">خالد بن عبدالهادي بن ابراهيم شيخ</td><td>سعودي</td><td>kh99999@@yahoo.com</td></tr>
+                        <tr><td>18</td><td class="fw-bold">عبدالعزيز ابراهيم عواد الحازمي</td><td>سعودي</td><td>biohazmi@@hotmail.com</td></tr>
+                        <tr><td>19</td><td class="fw-bold">معتز اسعد حسين بري</td><td>سعودي</td><td>diver.saudi@@yahoo.com</td></tr>
+                        <tr><td>20</td><td class="fw-bold">حسين محمد إبراهيم قرة علي</td><td>سعودي</td><td>38karaali@@hotmail.com</td></tr>
+                        <tr><td>21</td><td class="fw-bold">نوف مزعل عبيد الحربي</td><td>سعودي</td><td>alharbi.nouf@@yahoo.com</td></tr>
+                        <tr><td>22</td><td class="fw-bold">توفيق نور الدين لطف الله خان نمناكي</td><td>سعودي</td><td>heav1391@@gmail.com</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>

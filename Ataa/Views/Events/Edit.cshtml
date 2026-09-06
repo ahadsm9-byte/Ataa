@@ -1,0 +1,297 @@
+﻿@model Ataa.Models.Events
+
+@{
+    Layout = null;
+    ViewData["Title"] = "تعديل الفعالية";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --main-green: #2d4d22;
+            --light-bg: #f8faf9;
+            --text-green: #3d5a37;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .edit-container {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            max-width: 850px;
+            width: 100%;
+        }
+
+        .form-title {
+            color: var(--main-green);
+            margin-bottom: 35px;
+            border-right: 6px solid var(--main-green);
+            padding-right: 15px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.75rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            text-align: right;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: var(--text-green);
+                font-weight: 600;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #ececec;
+            border-radius: 12px;
+            background-color: #fdfdfd;
+            transition: 0.3s;
+        }
+
+            .form-control:focus {
+                border-color: var(--main-green);
+                box-shadow: 0 0 0 0.2rem rgba(45, 77, 34, 0.1);
+                outline: none;
+            }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .image-section {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1.5px dashed #d1d1d1;
+        }
+
+        .current-image-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        #statusToast {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--main-green);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 9999;
+            display: none;
+            animation: slideDown 0.4s ease-out;
+        }
+
+
+
+        .btn-action {
+            padding: 12px 30px;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: 0.3s;
+        }
+
+        .back-arrow-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border: 2px solid var(--main-green);
+            border-radius: 50%;
+            color: var(--main-green);
+            background-color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+            .back-arrow-circle i {
+                font-size: 24px;
+                line-height: 0;
+            }
+
+            .back-arrow-circle:hover {
+                background-color: var(--main-green);
+                color: white !important;
+                transform: scale(1.1);
+            }
+
+        .archive-container {
+            position: relative;
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 0 20px;
+            direction: rtl;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="statusToast">
+        <i class="bi bi-check-circle-fill me-2"></i> تم حفظ التعديلات بنجاح!
+    </div>
+
+
+    <div class="edit-container">
+
+        <h2 class="form-title">تعديل بيانات الفعالية</h2>
+
+        <form asp-action="Edit" enctype="multipart/form-data" id="editForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Image" />
+            <input type="hidden" asp-for="Status" id="eventStatus" />
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>اسم الفعالية</label>
+                    <input asp-for="Name" class="form-control" placeholder="أدخل اسم الفعالية" />
+                </div>
+
+                <div class="form-group">
+                    <label>التصنيف</label>
+                    <select asp-for="Category" class="form-control">
+                        <option value="تعليمي">تعليمي</option>
+                        <option value="بيئي">بيئي</option>
+                        <option value="صحي">صحي</option>
+                        <option value="اجتماعي">اجتماعي</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>الوصف التفصيلي</label>
+                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="اكتب وصفاً مختصراً للفعالية..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>التاريخ والوقت</label>
+                    <input asp-for="Date" class="form-control" type="datetime-local" />
+                </div>
+                <div class="form-group">
+                    <label>الموقع</label>
+                    <input asp-for="Location" class="form-control" placeholder="مكان الإقامة" />
+                </div>
+
+                <div class="form-group">
+                    <label>ساعات التطوع</label>
+                    <input asp-for="Hours" class="form-control" type="number" />
+                </div>
+                <div class="form-group">
+                    <label>الطاقة الاستيعابية (العدد المطلوب)</label>
+                    <input asp-for="Capacity" class="form-control" type="number" placeholder="مثال: 50" min="1" />
+                    <span asp-validation-for="Capacity" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>الجهة المنظمة</label>
+                    <input asp-for="OrganizingEntity" class="form-control" />
+                </div>
+
+                <div class="form-group full-width">
+                    <label>تحديث صورة الغلاف</label>
+                    <div class="image-section">
+                        <img src="@(string.IsNullOrEmpty(Model.Image) ? "/images/default.jpg" : Model.Image)"
+                             class="current-image-preview" id="imgView" alt="Preview" />
+                        <div class="flex-grow-1">
+                            <input type="file" name="ImageFile" class="form-control" accept="image/*" onchange="previewImage(this)" />
+                            <small class="text-muted mt-2 d-block">يفضل استخدام صور عالية الجودة (PNG, JPG)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3 mt-5">
+                <a asp-action="emIndex" class="btn btn-outline-secondary btn-action px-4">
+                    <i class="bi bi-arrow-right me-1"></i> إلغاء والعودة
+                </a>
+
+                <button type="button" onclick="handleAjaxSave('Draft')" class="btn btn-light border btn-action">
+                    <i class="fas fa-file-alt me-1 text-secondary"></i> حفظ كمسودة
+                </button>
+
+                <button type="button" onclick="handleAjaxSave('Published')" class="btn btn-success btn-action px-5 shadow-sm" style="background-color: var(--main-green);">
+                    <i class="fas fa-check-circle me-1"></i> اعتماد ونشر التعديلات
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function handleAjaxSave(statusValue) {
+            document.getElementById('eventStatus').value = statusValue;
+            const form = document.getElementById('editForm');
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                });
+
+                if (response.ok) {
+                    const toast = document.getElementById('statusToast');
+                    toast.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/Events/emIndex';
+                    }, 1500);
+                } else {
+                    const errorText = await response.text();
+                    alert("خطأ في التحقق: " + errorText);
+                }
+            } catch (error) {
+                alert("فشل الاتصال: " + error);
+            }
+        }
+    </script>
+</body>
+</html>

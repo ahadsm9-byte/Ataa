@@ -1,0 +1,238 @@
+﻿@model dynamic
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+
+}
+
+<style>
+    .sidebar, #sidebar-wrapper, .main-sidebar, .nav-menu-container, .pagination_div {
+        display: none !important;
+    }
+
+    .main-wrapper, .content-wrapper, main, .body_container, .inner {
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .gallery-section {
+        background-color: #fcfcfc;
+        min-height: 100vh;
+        padding: 40px 20px 80px 20px;
+        direction: rtl;
+        font-family: 'Changa', sans-serif;
+    }
+
+    .gallery-title-box {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+        .gallery-title-box h1 {
+            color: #1d4d2b;
+            font-weight: 700;
+            font-size: 2.8rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+            .gallery-title-box h1::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 60px;
+                height: 5px;
+                background: #b89146;
+                border-radius: 10px;
+            }
+
+    .search-container {
+        max-width: 600px;
+        margin: 0 auto 50px;
+        position: relative;
+    }
+
+    .modern-search {
+        width: 100%;
+        padding: 15px 55px 15px 25px;
+        border-radius: 30px;
+        border: 2px solid #1d4d2b;
+        background: white;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        outline: none;
+        transition: 0.3s;
+    }
+
+        .modern-search:focus {
+            border-color: #b89146;
+            box-shadow: 0 4px 20px rgba(184, 145, 70, 0.2);
+        }
+
+    .search-icon {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #1d4d2b;
+        font-size: 1.2rem;
+    }
+
+    .photo-card-wrapper {
+        transition: 0.3s;
+    }
+
+    .photo-card {
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        transition: all 0.3s ease-in-out;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #f0f0f0;
+    }
+
+        .photo-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+
+    .img-wrapper {
+        position: relative;
+        height: 230px;
+        width: 100%;
+        overflow: hidden;
+    }
+
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+    .photo-card:hover .img-wrapper img {
+        transform: scale(1.1);
+    }
+
+    .content-box {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+        .content-box h2 {
+            color: #2c3e50;
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.6;
+            margin: 0 0 15px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 3.2em;
+        }
+
+    .meta-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #f8f8f8;
+        padding-top: 15px;
+    }
+
+    .meta-date {
+        font-size: 0.85rem;
+        color: #95a5a6;
+    }
+
+    .category-badge {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 3px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+</style>
+
+<div class="gallery-section">
+    <div class="container-fluid" style="max-width: 1500px;">
+        <div class="gallery-title-box">
+            <h1>ألبوم الصور</h1>
+            <p style="color: #7f8c8d; margin-top: 10px;">استعراض لجميع مبادرات وانجازات جمعية البيئة بالمدينة المنورة</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="photoSearch" onkeyup="filterPhotos()" placeholder="ابحث في الصور والفعاليات..." class="modern-search">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+
+        <div class="row g-4" id="photoGrid">
+            @{
+                var galleryItems = new[] {
+            new { Title = "حققت الجمعية المركز الثالث في جائزة المدينة المنورة للبيئة 2024", Date = "13 مارس 2025", Img = "1_67d2c41408e51.jpeg" },
+            new { Title = "لقاء مع صاحب السمو الملكي الأمير سعود بن خالد الفيصل", Date = "02 يوليو 2024", Img = "1_66833f3492688.jpg" },
+            new { Title = "بالتنسيق والتعاون مع المركز الوطني لتنمية الغطاء النباتي", Date = "05 اغسطس 2025", Img = "1_68922e6574cff.jpg" },
+            new { Title = "جمعية البيئة بالمدينة مع المركز الوطني لمكافحة التصحر", Date = "02 يوليو 2024", Img = "4_66835abcdfb9f.jpg" },
+            new { Title = "بالتعاون مع هيئة الهلال الأحمر وبلدية أحد", Date = "02 يوليو 2024", Img = "4_66834be4cdbc2.jpg" },
+            new { Title = "مشاركة الجمعية بفعاليات اليوم الوطني بحديقة الملك فهد", Date = "25 سبتمبر 2024", Img = "4_66f33f3b32b75.jpg" },
+            new { Title = "اليوم الأول: بناء نموذج العمل للجمعيات وتبادل الخبرات", Date = "25 سبتمبر 2024", Img = "1_66f3412914e7a.jpg" },
+            new { Title = "اليوم الثاني: بناء نموذج العمل للجمعيات وتبادل الخبرات", Date = "25 سبتمبر 2024", Img = "1_66f3422cbe02b.jpg" },
+            new { Title = "نفّذت جمعية البيئة حملة تشجير - المرحلة الأولى", Date = "25 سبتمبر 2024", Img = "3_66f3439fb0e55.jpg" },
+            new { Title = "نفّذت جمعية البيئة حملة تشجير - المرحلة الثانية", Date = "25 سبتمبر 2024", Img = "3_66f3454f9f51d.jpg" },
+            new { Title = "نفّذت جمعية البيئة حملة تشجير - المرحلة الثالثة", Date = "28 سبتمبر 2024", Img = "1_66f723a735e57.jpg" },
+            new { Title = "نفّذت جمعية البيئة حملة تشجير - المرحلة الرابعة", Date = "02 يوليو 2024", Img = "1_66833e9bd4eee.jpg" },
+            new { Title = "الملتقي التوعوي الثقافي الأول والثاني", Date = "25 سبتمبر 2024", Img = "1_66f34cf77551d.jpg" },
+            new { Title = "بالتعاون مع المركز الوطني لتنمية الغطاء النباتي - إدارة المراعي", Date = "28 سبتمبر 2024", Img = "1_66f72192e42d9.jpg" },
+            new { Title = "فعاليات يوم المسؤولية الاجتماعية (بيئتك تعرفك)", Date = "25 سبتمبر 2024", Img = "2_66f33e74ddf50.jpg" },
+            new { Title = "مقتطفات لزيارة مرعى السدرة بمركز بئر الروحاء", Date = "25 سبتمبر 2024", Img = "2_66f33db4ac9dc.jpg" },
+            new { Title = "المرحلة الثالثة من تشجير غابة السدرة", Date = "10 يوليو 2024", Img = "1_668ed3182dea1.jpeg" },
+            new { Title = "حملة رقم ١ و 2 ضمن مبادرة خير المدينة", Date = "02 يوليو 2024", Img = "1_66833bf714a25.jpg" }
+            };
+
+                foreach (var item in galleryItems)
+                {
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 photo-card-wrapper" data-title="@item.Title">
+                        <div class="photo-card">
+                            <div class="img-wrapper">
+                                <img src="https://www.madinah-eco.org.sa/rafed/uploads/website_gallery/thumbnails/@item.Img" alt="@item.Title">
+                            </div>
+                            <div class="content-box">
+                                <h2>@item.Title</h2>
+                                <div class="meta-footer">
+                                    <span class="meta-date"><i class="far fa-clock"></i> @item.Date</span>
+                                    <span class="category-badge">فعالية</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+      
+<script>
+    function filterPhotos() {
+        let input = document.getElementById('photoSearch').value.toLowerCase();
+        let cards = document.getElementsByClassName('photo-card-wrapper');
+
+        for (let i = 0; i < cards.length; i++) {
+            let title = cards[i].getAttribute('data-title').toLowerCase();
+            if (title.includes(input)) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+</script>

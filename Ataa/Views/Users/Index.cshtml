@@ -1,0 +1,235 @@
+﻿@model IEnumerable<Ataa.Models.Users>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiForgeryToken() => Xsrf.GetAndStoreTokens(Context).RequestToken;
+}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<style>
+    .rounded-40 { border-radius: 40px !important; }
+    .form-control-custom { height: 55px; background-color: #f8f9fa; border: none; border-radius: 50px; text-align: center; }
+    .form-control-custom:focus { border: 1px solid #2d5a27; background-color: #fff; }
+    .search-box:focus { border-color: #2d5a27; box-shadow: 0 0 0 0.2rem rgba(45, 90, 39, 0.15); }
+    .btn-success-ataa { background-color: #2d5a27; border: none; color: white; }
+    .btn-success-ataa:hover { background-color: #1e3d1a; color: white; }
+</style>
+
+<div class="container py-4" dir="rtl">
+    <input type="hidden" id="global_antiforgery" value="@GetAntiForgeryToken()" />
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 style="color: #2d5a27; font-weight: bold;">إدارة أعضاء عطاء</h2>
+        <button onclick="openCreateModal()" class="btn btn-success-ataa rounded-pill px-4 shadow-sm">
+            <i class="bi bi-person-plus-fill"></i> إضافة جديد
+        </button>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <div class="input-group shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" id="searchInput" onkeyup="filterTable()" class="form-control border-0 search-box shadow-none" placeholder="ابحث عن اسم أو بريد...">
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+        <table class="table table-hover text-center mb-0" id="usersTable">
+            <thead style="background-color: #2d5a27; color: white;">
+                <tr>
+                    <th class="py-3">الاسم</th>
+                    <th class="py-3">البريد الإلكتروني</th>
+                    <th class="py-3">العمليات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="align-middle fw-bold">@item.Name</td>
+                        <td class="align-middle text-muted">@item.Email</td>
+                        <td class="align-middle">
+                            <button class="btn btn-sm btn-outline-info rounded-circle mx-1" onclick="showDetails('@item.Name', '@item.Email', '@item.Role', '@item.Password')"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-sm btn-outline-success rounded-circle mx-1" onclick="openEditModal('@item.Id', '@item.Name', '@item.Email', '@item.Password', '@item.Role')"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-danger rounded-circle mx-1" onclick="confirmDelete('@item.Id', '@item.Name')"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="createUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0 rounded-40 p-4">
+            <div class="modal-body text-end">
+                <div class="text-center mb-3">
+                    <i class="bi bi-person-plus-fill display-4" style="color: #2d5a27;"></i>
+                    <h2 class="fw-light" style="color: #2d5a27;">إضافة عضو جديد</h2>
+                </div>
+                <form id="createUserForm">
+                    <div class="mb-3">
+                        <label class="fw-bold px-2 small text-muted">الاسم الكامل</label>
+                        <input type="text" name="Name"xt" name="Name" class="form-control form-control-custom shadow-none" placeholder="أدخل الاسم الثلاثي">
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold px-2 small text-muted">البريد الإلكتروني</label>
+                        <input type="email" name="Email" class="form-control form-control-custom shadow-none" placeholder="example@ataa.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold px-2 small text-muted">كلمة المرور</label>
+                        <input type="password" name="Password" class="form-control form-control-custom shadow-none" placeholder="••••••••">
+                    </div>
+                    <div class="mb-4">
+                        <label class="fw-bold px-2 small text-muted">صلاحية المستخدم</label>
+                        <select name="Role" class="form-select form-control-custom shadow-none text-center">
+                            <option value="Employee">موظف (User)</option>
+                            <option value="Admin">مدير (Admin)</option>
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="button" onclick="submitCreateForm()" class="btn btn-success-ataa rounded-pill py-3 fw-bold shadow-sm">إتمام الإضافة</button>
+                        <button type="button" class="btn btn-link text-muted text-decoration-none small" data-bs-dismiss="modal">إلغاء والعودة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0 rounded-40 p-4">
+            <div class="modal-body text-end">
+                <div class="text-center mb-3">
+                    <i class="bi bi-pencil-square display-4" style="color: #2d5a27;"></i>
+                    <h2 class="fw-light" style="color: #2d5a27;">تعديل البيانات</h2>
+                </div>
+                <form id="editUserForm">
+                    <input type="hidden" name="Id" id="edit_id" />
+                    <div class="mb-3">
+                        <label class="fw-bold px-2 small text-muted">الاسم</label>
+                        <input type="text" name="Name" id="edit_name" class="form-control form-control-custom shadow-none">
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold px-2 small text-muted">البريد</label>
+                        <input type="email" name="Email" id="edit_email" class="form-control form-control-custom shadow-none">
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold px-2 small text-muted">كلمة المرور</label>
+                        <input type="password" name="Password" id="edit_password" class="form-control form-control-custom shadow-none">
+                    </div>
+                    <div class="mb-4">
+                        <label class="fw-bold px-2 small text-muted">الصلاحية</label>
+                        <select name="Role" id="edit_role" class="form-select form-control-custom shadow-none text-center">
+                            <option value="Employee">موظف (User)</option>
+                            <option value="Admin">مدير (Admin)</option>
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="button" onclick="submitEditForm()" class="btn btn-success-ataa rounded-pill py-3 fw-bold shadow-sm">حفظ التغييرات</button>
+                        <button type="button" class="btn btn-link text-muted text-decoration-none small" data-bs-dismiss="modal">العودة للقائمة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function filterTable() {
+            let filter = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.querySelectorAll("#usersTable tbody tr");
+            rows.forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(filter) ? "" : "none";
+            });
+        }
+
+        function openCreateModal() {
+            document.getElementById('createUserForm').reset();
+            new bootstrap.Modal(document.getElementById('createUserModal')).show();
+        }
+
+        function submitCreateForm() {
+            const formData = new FormData(document.getElementById('createUserForm'));
+            fetch('/Users/Create', {
+                method: 'POST',
+                headers: { "RequestVerificationToken": document.getElementById('global_antiforgery').value },
+                body: formData
+            }).then(res => {
+                if (res.ok) {
+                    Swal.fire({ icon: 'success', title: 'تمت الإضافة!', timer: 1500, showConfirmButton: false })
+                    .then(() => location.reload());
+                } else {
+                    Swal.fire('خطأ!', 'تأكد من إدخال جميع البيانات بشكل صحيح', 'error');
+                }
+            });
+        }
+
+        function openEditModal(id, name, email, password, role) {
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_name').value = name;
+            document.getElementById('edit_email').value = email;
+            document.getElementById('edit_password').value = password;
+
+            const roleSelect = document.getElementById('edit_role');
+            roleSelect.value = role.trim();
+
+            new bootstrap.Modal(document.getElementById('editUserModal')).show();
+        }
+
+        function submitEditForm() {
+            const formData = new FormData(document.getElementById('editUserForm'));
+            fetch('/Users/Edit/' + document.getElementById('edit_id').value, {
+                method: 'POST',
+                headers: { "RequestVerificationToken": document.getElementById('global_antiforgery').value },
+                body: formData
+            }).then(res => {
+                if (res.ok) {
+                    Swal.fire({ icon: 'success', title: 'تم التحديث!', timer: 1500, showConfirmButton: false })
+                    .then(() => location.reload());
+                }
+            });
+        }
+
+        function showDetails(name, email, role, password) {
+            Swal.fire({
+                title: '<span style="color:#2d5a27">تفاصيل المستخدم</span>',
+                html: `<div class="text-end px-3" dir="rtl">
+                    <p><b>الاسم:</b> ${name}</p><hr>
+                    <p><b>البريد:</b> ${email}</p><hr>
+                    <p><b>الصلاحية:</b> ${role === 'Employee' ? 'موظف' : 'مدير'}</p><hr>
+                    <p><b>كلمة المرور:</b> <span id="pTxt" style="filter:blur(4px)">${password}</span>
+                    <button class="btn btn-sm btn-light py-0" onclick="document.getElementById('pTxt').style.filter='none'">إظهار</button></p>
+                </div>`,
+                confirmButtonColor: '#2d5a27',
+                customClass: { popup: 'rounded-40 shadow-lg' }
+            });
+        }
+
+        function confirmDelete(id, name) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: سيتم حذف المستخدم: ${name},
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#2d5a27',
+                confirmButtonText: 'نعم، احذف',
+                cancelButtonText: 'إلغاء',
+                customClass: { popup: 'rounded-40' }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/Users/Delete/' + id, {
+                        method: 'POST',
+                        headers: { "RequestVerificationToken":document.getElementById('global_antiforgery').value }
+                    }).then(() => location.reload());
+                }
+            });
+        }
+    </script>
+}

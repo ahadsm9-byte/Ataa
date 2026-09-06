@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Ataa.Models.Events>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+<style>
+    .emp-container {
+        max-width: 1000px;
+        margin: 50px auto;
+        direction: rtl;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .event-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px 30px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        border: 1px solid #eee;
+        transition: 0.3s;
+    }
+
+        .event-card:hover {
+            transform: scale(1.01);
+            border-color: #2d4d22;
+        }
+
+    .event-title {
+        color: #2d4d22;
+        font-weight: bold;
+        margin: 0;
+        font-size: 1.2rem;
+    }
+
+    .event-meta {
+        color: #777;
+        font-size: 0.9rem;
+    }
+
+    .go-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 2px solid #2d4d22;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2d4d22;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+        .go-btn:hover {
+            background: #2d4d22;
+            color: white !important;
+        }
+</style>
+
+<div class="emp-container">
+    <div class="page-header">
+        <h2 style="color: #2d4d22; font-weight: 800;">إدارة الفعاليات والمتطوعين</h2>
+        <p class="text-muted">اختر فعالية لعرض قائمة المتطوعين المسجلين بها</p>
+    </div>
+
+    @foreach (var item in Model)
+    {
+        <div class="event-card">
+            <div class="d-flex align-items-center gap-4">
+                <a asp-action="ViewVolunteers" asp-route-id="@item.Id" class="go-btn">
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+                <div>
+                    <h3 class="event-title">@item.Name</h3>
+                    <div class="event-meta">
+                        <span><i class="bi bi-geo-alt"></i> @item.Location</span> |
+                        <span><i class="bi bi-calendar-event"></i> @item.Date.ToShortDateString()</span>
+                    </div>
+                </div>
+            </div>
+
+            <span class="badge" style="background: #eef3ed; color: #2d4d22;">إدارة المسجلين</span>
+        </div>
+    }
+</div>

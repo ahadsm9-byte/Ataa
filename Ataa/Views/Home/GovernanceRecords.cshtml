@@ -1,0 +1,101 @@
+﻿@model dynamic
+@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+
+}
+
+<style>
+    .sidebar, #sidebar-wrapper, .main-sidebar {
+        display: none !important;
+    }
+
+    .main-wrapper, .content-wrapper, main {
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .records-bg {
+        background: linear-gradient(rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.98)), url('/images/madinah_watermark.jpg');
+        background-size: cover;
+        min-height: 100vh;
+        padding: 60px 15px;
+        direction: rtl;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    .header-section h1 {
+        color: #b89146;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .record-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        border-top: 5px solid #1d4d2b;
+        transition: 0.3s;
+        height: 100%;
+    }
+
+        .record-card:hover {
+            transform: translateY(-7px);
+        }
+
+    .icon-circle {
+        width: 70px;
+        height: 70px;
+        background: #f9f5ec;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: #b89146;
+        font-size: 2rem;
+    }
+
+    .btn-action {
+        background: #1d4d2b;
+        color: white !important;
+        display: block;
+        padding: 10px;
+        border-radius: 8px;
+        text-decoration: none !important;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="records-bg">
+    <div class="container">
+        <div class="header-section">
+            <h1>محاضر الجمعية العمومية وسجل الأعضاء</h1>
+        </div>
+
+        <div class="row g-4">
+            @{
+                var records = new[] {
+                        new { Name = "محضر اجتماع الجمعية العمومية العادية 2025م", Size = "524 KB", File = "2_68f6b59b4b927.pdf" },
+                        new { Name = "محضر اجتماع الجمعية العمومية غير العادية 2024م", Size = "977 KB", File = "3_68f6b59b4c0fe.pdf" },
+                        new { Name = "سجل أعضاء الجمعية العمومية", Size = "162 KB", File = "1_68f92ae1898fc.pdf" }
+                        };
+
+                foreach (var item in records)
+                {
+                    <div class="col-md-4">
+                        <div class="record-card">
+                            <div class="icon-circle"><i class="fas fa-file-contract"></i></div>
+                            <h5 style="color:#1d4d2b; font-weight:700; min-height:50px">@item.Name</h5>
+                            <small class="text-muted">الحجم: @item.Size</small>
+                            <a href="https://www.madinah-eco.org.sa/uploads/website_pages/@item.File" target="_blank" class="btn-action">
+                                <i class="fas fa-download"></i> عرض الملف
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+     

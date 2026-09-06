@@ -1,0 +1,225 @@
+﻿@{
+    Layout = "~/Views/Shared/_homeLayout1.cshtml";
+
+    ViewData["Title"] = "مكتبة الفيديو الملكية - جمعية البيئة";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    aside, .sidebar, #sidebar-wrapper, .main-sidebar, .nav-side-menu {
+        display: none !important;
+    }
+
+    .content-wrapper, .main-content, .container, .body_container {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .royal-wrapper {
+        direction: rtl;
+        font-family: 'Changa', sans-serif;
+        padding: 60px 5%;
+        min-height: 100vh;
+        background: #fcfcfc;
+        position: relative;
+    }
+
+    .header-section {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+        .header-section h1 {
+            color: #1e611e;
+            font-weight: 700;
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+            .header-section h1::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 20%;
+                width: 60%;
+                height: 4px;
+                background: linear-gradient(to right, #f4ae33, #cfa03b);
+                border-radius: 10px;
+            }
+
+    .search-container {
+        max-width: 600px;
+        margin: 0 auto 50px;
+        position: relative;
+    }
+
+    .royal-search {
+        width: 100%;
+        padding: 15px 55px 15px 25px;
+        border-radius: 30px;
+        border: 2px solid #5e945f;
+        background: white;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .search-icon {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #5e945f;
+        font-size: 1.2rem;
+    }
+
+    .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+    }
+
+    .royal-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        overflow: hidden;
+        transition: 0.3s;
+        text-decoration: none !important;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #f0f0f0;
+    }
+
+        .royal-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+    .thumb-area {
+        position: relative;
+        padding-top: 56.25%;
+        background-color: #000;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .play-btn-gold {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 65px;
+        height: 65px;
+        background: linear-gradient(135deg, #f4ae33, #cfa03b);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        box-shadow: 0 4px 15px rgba(244, 174, 51, 0.4);
+    }
+
+    .card-info {
+        padding: 20px;
+        flex-grow: 1;
+    }
+
+        .card-info h3 {
+            font-size: 1.05rem;
+            color: #333;
+            line-height: 1.6;
+            height: 3.2em;
+            overflow: hidden;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+    .card-footer-meta {
+        border-top: 1px solid #f5f5f5;
+        padding-top: 10px;
+        font-size: 0.85rem;
+        color: #888;
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+<div class="royal-wrapper">
+    <div class="header-section">
+        <h1>ألبوم الفيديو</h1>
+        <p class="text-muted">نستعرض مبادرات وجهود جمعية البيئة بالمدينة المنورة</p>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="vSearch" onkeyup="searchVids()" placeholder="ابحث في الفيديوهات..." class="royal-search">
+        <i class="fas fa-search search-icon"></i>
+    </div>
+
+    <div class="video-grid" id="vGrid">
+        @{
+            var vids = new List<dynamic> {
+ 
+        new { Id = "7flImF4vgRg", Title = "ومضة بيئية: النباتات الغازية وتأثيرها - د. عبدالسلام الفيفي", Date = "09 يناير 2025" },
+        new { Id = "Wuhiuu1sjho", Title = "ظل المستقبل: فيلم قصير عن التشجير ومكافحة التصحر", Date = "28 سبتمبر 2024" },
+        new { Id = "_tUIoRZM4co", Title = "ومضة بيئية: البيئة في الثقافة الإسلامية - د. عبدالرحمن الوقيصي", Date = "09 يناير 2025" },
+        new { Id = "ZxtMOkLtvLw", Title = "برنامج أخضر للتدريب - مبادرة الوعي البيئي", Date = "06 مايو 2024" },
+        new { Id = "fsEy3qPg_SU", Title = "ومضة بيئية: الحدائق المنزلية - د. ايمان عسيري", Date = "09 يناير 2025" },
+        new { Id = "RG32xqVXfH4", Title = "ومضة بيئية: دور علم الاجتماع في حماية البيئة - د. ندى إلياس", Date = "09 يناير 2025" },
+        new { Id = "JzuBzZ_PoZw", Title = "ومضة بيئية: تعريف التصحر وأسبابه - د. خمايل", Date = "09 يناير 2025" },
+        new { Id = "ZLVOhL5HNUM", Title = "تدشين منتزه السدرة - كلمة رئيس المركز", Date = "28 سبتمبر 2024" },
+        new { Id = "NZniJEAJqJA", Title = "ورشة عمل دور القطاع غير الربحي والمتطوعين في تنمية الغطاء النباتي", Date = "26 نوفمبر 2024" },
+        new { Id = "N8fdyKij3JQ", Title = "تدشين غابة السدرة - كلمة اللواء صقر", Date = "28 سبتمبر 2024" },
+        new { Id = "GuaLeP0A_Lg", Title = "فعالية تنظيف حرة رهاط بالمدينة المنورة", Date = "02 يوليو 2024" },
+        new { Id = "_0poHrYfqW8", Title = "مبيد شجرة البرسوبس برسوباك", Date = "02 يوليو 2024" },
+        new { Id = "F0iSxorzde4", Title = "تدشين غابة السدرة - كلمة الدكتور أديب", Date = "28 سبتمبر 2024" },
+        new { Id = "LFeSTn34Fdc", Title = "مشروع إنشاء غابة السدرة بالمدينة المنورة", Date = "02 يوليو 2024" },
+        new { Id = "3YYqPgxLz-Y", Title = "تنظيف مزرعة وبئر عثمان بن عفان رضي الله عنه", Date = "02 يوليو 2024" },
+        new { Id = "Wc_yCQu6Qk4", Title = "فعالية تنظيف متزه الفقرة - اليوم الأول", Date = "02 يوليو 2024" },
+        new { Id = "Vw3DTZfqNjk", Title = "فعالية تنظيف متزه الفقرة - اليوم الثاني", Date = "02 يوليو 2024" },
+        new { Id = "fQ6_8iDpKlQ", Title = "تخلص من سوسة النخيل الحمراء", Date = "02 يوليو 2024" },
+
+        };
+
+            foreach (var v in vids)
+            {
+                string thumbUrl = $"https://img.youtube.com/vi/{v.Id}/hqdefault.jpg";
+
+                <a href="https://www.youtube.com/watch?v=@v.Id" target="_blank" class="royal-card" data-title="@v.Title">
+                    <div class="thumb-area" style="background-image: url('@thumbUrl')">
+                        <div class="play-btn-gold"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="card-info">
+                        <h3>@v.Title</h3>
+                        <div class="card-footer-meta">
+                            <span><i class="far fa-calendar-alt"></i> @v.Date</span>
+                            <span style="color: #cfa03b; font-weight: bold;">مشاهدة الآن</span>
+                        </div>
+                    </div>
+                </a>
+            }
+        }
+
+
+    </div>
+</div>
+
+
+<script>
+    function searchVids() {
+        let input = document.getElementById('vSearch').value.toLowerCase();
+        let cards = document.getElementsByClassName('royal-card');
+
+        for (let i = 0; i < cards.length; i++) {
+            let title = cards[i].getAttribute('data-title').toLowerCase();
+            cards[i].style.display = title.includes(input) ? "flex" : "none";
+        }
+    }
+</script>

@@ -1,0 +1,186 @@
+﻿@model Ataa.Models.CertificateViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <title>شهادة تطوع - @Model.VolunteerName</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .cert-outer-wrapper {
+            width: 1200px;
+            height: 800px;
+            padding: 15px;
+            background: white;
+            box-sizing: border-box;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+            border: 25px solid #1a4a5e;
+            position: relative;
+        }
+
+        .cert-inner-border {
+            width: 100%;
+            height: 100%;
+            border: 4px solid #c0a060;
+            box-sizing: border-box;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            color: #1a4a5e;
+        }
+
+        .logo-text {
+            font-size: 46px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .content {
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .volunteer-name {
+            font-size: 60px;
+            color: #c0392b;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .details {
+            font-size: 26px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .footer-signatures {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            padding: 0 30px;
+        }
+
+        .sig-item {
+            text-align: center;
+            width: 220px;
+        }
+
+        .seal-box {
+            width: 110px;
+            height: 110px;
+            border: 3px double #1a4a5e;
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .seal-box img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .supervisor-name {
+            margin-top: 40px;
+            border-top: 2px solid #333;
+            padding-top: 10px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 260px;
+            color: rgba(26, 74, 94, 0.03);
+            pointer-events: none;
+        }
+
+        .date-info {
+            text-align: center;
+            font-size: 16px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="cert-outer-wrapper">
+        <div class="watermark">عطاء</div>
+
+        <div class="cert-inner-border">
+
+            <div class="header">
+                <p class="logo-text">منصة عطاء</p>
+                <p style="margin: 0; font-size: 18px;">Ataa Volunteering Platform</p>
+                <h2 style="margin-top: 15px; border-bottom: 3px solid #c0a060; display: inline-block;">
+                    شهادة شكر وتقدير
+                </h2>
+            </div>
+
+            <div class="content">
+                <p class="details">تتقدم إدارة منصة عطاء بجزيل الشكر والامتنان للمتطوع/ة:</p>
+
+                <span class="volunteer-name">@Model.VolunteerName</span>
+
+                <p class="details">
+                    نظير جهوده المبذولة ومشاركته المتميزة في مبادرة:<br>
+                    <strong style="color: #1a4a5e;">( @Model.EventName )</strong><br>
+                    بواقع <strong>@((int)Model.Hours)</strong> ساعة تطوعية.
+                </p>
+            </div>
+
+            <div class="footer-signatures">
+
+                <div class="sig-item">
+                    <p style="font-weight: bold;">ختم المنصة</p>
+                    <div class="seal-box">
+                        <img src="/images/signature.jpg" onerror="this.style.display='none'" />
+                    </div>
+                </div>
+
+                <div class="sig-item">
+                    <p style="font-weight: bold;">المشرف العام</p>
+                    <div class="supervisor-name">
+                        أ. اسم الشخص هنا
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="date-info">
+                صدرت بتاريخ: @Model.IssueDate.ToString("yyyy/MM/ddم")
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

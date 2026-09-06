@@ -1,0 +1,171 @@
+﻿@model IEnumerable<Ataa.Models.Projects>
+
+@{
+    ViewData["Title"] = "قائمة المشاريع";
+}
+
+<style>
+    .project-card {
+        border-radius: 15px;
+        transition: transform 0.2s;
+        border: none;
+    }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .progress {
+        height: 10px;
+        border-radius: 10px;
+    }
+
+    .status-badge {
+        font-size: 0.85rem;
+        border-radius: 50px;
+        font-weight: bold;
+        padding: 8px 18px;
+        backdrop-filter: blur(4px);
+    }
+</style>
+
+<div class="container py-4" dir="rtl">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-success">قائمة المشاريع</h2>
+        <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">
+            <i class="bi bi-plus-lg"></i> إضافة مشروع جديد
+        </a>
+    </div>
+
+    <div class="row g-3 mb-5">
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="bi bi-search"></i></span>
+                <input type="text" id="searchInput" class="form-control border-start-0 rounded-end-pill" placeholder="ابحث عن مشروع باسم المشروع...">
+            </div>
+        </div>
+        <div class="col-md-6 text-md-start">
+            <div class="btn-group shadow-sm" id="filterButtons">
+                <button class="btn btn-success active" data-filter="all">الكل</button>
+                <button class="btn btn-outline-success" data-filter="published">المنشورة</button>
+                <button class="btn btn-outline-success" data-filter="draft">المسودات</button>
+                <button class="btn btn-outline-success" data-filter="completed">مكتملة</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="projectsContainer">
+        @foreach (var item in Model)
+        {
+            @* --- التعديل هنا: حساب النسبة تلقائياً بناءً على المبالغ الحالية --- *@
+            var calcPercent = item.TargetAmount > 0
+            ? (int)Math.Min((item.CurrentAmount / item.TargetAmount) * 100, 100)
+            : 0;
+
+            var isCompleted = calcPercent >= 100;
+            var isDraft = item.Status == "Draft";
+            var filterClass = isDraft ? "draft" : (isCompleted ? "completed" : "published");
+
+            <div class="col project-item" data-status="@filterClass">
+                <div class="card h-100 shadow-sm project-card">
+                    <div class="position-relative">
+                        <img src="@(string.IsNullOrEmpty(item.Image) ? "/images/project-placeholder.jpg" : item.Image)"
+                             class="card-img-top p-2 rounded-4" alt="Project Image" style="height: 200px; object-fit: cover;">
+
+                        <div class="position-absolute top-0 end-0 m-3">
+                            @if (isDraft)
+                            {
+                                <span class="badge bg-secondary shadow-sm status-badge">مسودة</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success shadow-sm status-badge">منشور</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-dark project-name">@item.Name</h5>
+                        <p class="text-muted small mb-2"><i class="bi bi-building"></i> @item.OrganizingEntity</p>
+                        <p class="card-text text-muted small text-truncate">@item.Description</p>
+
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small class="fw-bold text-success">@calcPercent% مكتمل</small>
+                            </div>
+                            <div class="progress mb-3">
+                                <div class="progress-bar @(isCompleted ? "bg-primary shadow" : "bg-success")"
+                                     role="progressbar"
+                                     style="width: @calcPercent%; transition: width 1s ease-in-out;"
+                                     aria-valuenow="@calcPercent"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between text-center border-top pt-3">
+                            <div>
+                                <p class="mb-0 text-muted small">المستهدف</p>
+                                <span class="fw-bold">@item.TargetAmount.ToString("N0") ريال</span>
+                            </div>
+                            <div>
+                                <p class="mb-0 text-muted small">المتبقي</p>
+                                @{
+                                    var remaining = item.TargetAmount - item.CurrentAmount;
+                                    var displayRemaining = remaining > 0 ? remaining : 0;
+                                }
+                                <span class="fw-bold text-danger">@displayRemaining.ToString("N0") ريال</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 d-flex justify-content-around pb-3">
+                        @if (isCompleted)
+                        {
+                            <div class="w-100 px-3">
+                                <div class="alert alert-success border-0 rounded-pill py-2 mb-0 text-center shadow-sm" style="background-color: #f0fdf4; color: #166534; font-size: 0.9rem;">
+                                    <i class="bi bi-check2-all ms-1"></i>
+                                    <span class="fw-bold">تم اكتمال المشروع بنجاح
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3 transition-all">
+                                <i class="bi bi-pencil-square ms-1"></i> تعديل
+                            </a>
+                            <a asp-action="prodetails" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info rounded-pill px-3 transition-all">
+                                <i class="bi bi-info-circle ms-1"></i> تفاصيل
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger rounded-pill px-3 transition-all">
+                                <i class="bi bi-trash ms-1"></i> حذف
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#searchInput").on("keyup", function () {
+                var val = $(this).val().toLowerCase();
+                $(".project-item").each(function () {
+                    var name = $(this).find(".project-name").text().toLowerCase();
+                    $(this).toggle(name.includes(val));
+                });
+            });
+
+            $('#filterButtons .btn').on('click', function () {
+                $('#filterButtons .btn').removeClass('active btn-success').addClass('btn-outline-success');
+                $(this).addClass('active btn-success').removeClass('btn-outline-success');
+                var filter = $(this).data('filter');
+                if (filter === 'all') { $('.project-item').show(); }
+                else { $('.project-item').hide(); $('.project-item[data-status="' + filter + '"]').show(); }
+            });
+        });
+    </script>
+}
